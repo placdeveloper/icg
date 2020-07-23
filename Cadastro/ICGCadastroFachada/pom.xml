@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>icg-cadastro-fachada</artifactId>
+	<packaging>jar</packaging>
+
+	<name>ICG - Cadastro - ICGCadastroFachada</name>
+
+	<parent>
+		<groupId>br.com.sicoob.icg</groupId>
+		<artifactId>icg-modulo-cadastro</artifactId>
+		<version>1.0.0.24-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
+
+	<dependencies>
+		<!-- ICG -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>icg-entidades</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>icg-comum-ejb</artifactId>
+			<version>${project.version}</version>
+		</dependency>		
+
+		<!-- INTERNAS -->
+		<dependency>
+			<groupId>br.com.sicoob.framework</groupId>
+			<artifactId>sicoob-java</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>br.com.sicoob.framework</groupId>
+			<artifactId>sicoob-was9</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>br.com.sicoob.framework.portal</groupId>
+			<artifactId>prt-base-sisbr-java</artifactId>
+		</dependency>
+		<!-- INTERNAS -->
+
+		<!-- EXTERNAS -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+		<!-- EXTERNAS -->
+	</dependencies>
+</project>

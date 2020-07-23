@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Module xmlns:mx="http://www.adobe.com/2006/mxml"
+		   width="800" height="600" backgroundAlpha="0" borderStyle="solid" borderThickness="0">
+</mx:Module>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;icg-cadastro-flex/src/br/com/sicoob/icg/vo/ArquivoExportacaoVO.as&apos; to &apos;DownloadDominioVO.as&apos;" description="Rename resource &apos;ArquivoExportacaoVO.as&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/br/com/sicoob/icg/vo/ArquivoExportacaoVO.as" name="DownloadDominioVO.as" stamp="1559592498056" updateReferences="true"/>
+</session>

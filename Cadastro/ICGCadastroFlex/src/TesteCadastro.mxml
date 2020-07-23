@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical" xmlns:local="*"
+	autoLayout="true" width="800" height="800" 
+	backgroundImage="../br/com/bancoob/imagens/background.jpg"
+	backgroundColor="#D3D9D3" horizontalScrollPolicy="off" themeColor="#004000"
+	initialize="StyleManager.loadStyleDeclarations('../temas/default/temaDefault.swf')" xmlns:containers="br.com.bancoob.componentes.containers.*">
+	
+</mx:Application>

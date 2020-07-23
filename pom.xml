@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>br.com.sicoob.icg</groupId>
+	<artifactId>icg</artifactId>
+	<packaging>pom</packaging>
+	<version>1.0.0.24-SNAPSHOT</version>
+
+	<name>ICG</name>
+	<description>Importação Cadastro Geral</description>
+	<url>http://maven.apache.org</url>
+
+	<organization>
+		<name>Sicoob</name>
+		<url>http://www.sicoob.com.br</url>
+	</organization>
+
+	<parent>
+		<groupId>br.com.sicoob.framework.pom</groupId>
+		<artifactId>super-pom</artifactId>
+		<version>3.1</version>
+	</parent>
+
+	<properties>
+		<maven.build.timestamp.format>dd/MM/yyyy - HH:mm</maven.build.timestamp.format>
+
+		<!-- FRAMEWORK -->
+		<versao.sicoob-java>1.0.14.7</versao.sicoob-java>
+		<versao.sicoob-was>1.0.15.0</versao.sicoob-was>
+
+		<versao.corporativo-componentes>1.0.0.0</versao.corporativo-componentes>
+		<versao.framework-base>1.0.2.0</versao.framework-base>
+		<versao.gerador-hash>1.0.2.0</versao.gerador-hash>
+		<versao.prt-aplicativo>1.0.3.1</versao.prt-aplicativo>
+		<versao.prt-base-sisbr-assets>1.0.1.11</versao.prt-base-sisbr-assets>
+		<versao.prt-framework>1.0.7.22</versao.prt-framework>
+		<versao.sicoob-autenticacao>1.0.0.1</versao.sicoob-autenticacao>
+		<versao.sicoob-test-lib>1.0.0.2</versao.sicoob-test-lib>
+
+		<!-- INTERNAS -->
+		<versao.capes>1.2.13.60</versao.capes>
+		<versao.capes.api>2.0.0.32</versao.capes.api>
+		<versao.ged.backoffice>1.0.26.21</versao.ged.backoffice>
+		<versao.ged.api>1.1.0.143</versao.ged.api>
+		<versao.sws-api>1.0.6.1</versao.sws-api>
+
+		<!-- EXTERNAS -->
+		<versao.granite>1.1.0</versao.granite>
+	</properties>
+
+	<profiles>
+		<profile>
+			<id>was</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<resources>
+					<resource>
+						<directory>${project.basedir}/was-resources</directory>
+					</resource>
+				</resources>
+			</build>
+		</profile>
+		<profile>
+			<id>was-stubs</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>br.com.sicoob.framework.plugin.maven</groupId>
+						<artifactId>sicoob-ibm-stubs</artifactId>
+						<version>1.0.1.15</version>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>gerar-stubs</goal>
+								</goals>
+								<configuration>
+									<stubs>
+										<stub>
+											<ear>icg-ear-backoffice</ear>
+										</stub>
+										<stub>
+											<ear>icg-ear-processamento</ear>
+										</stub>
+									</stubs>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+			<dependencies>
+				<dependency>
+					<groupId>br.com.sicoob.framework</groupId>
+					<artifactId>sicoob-jaas</artifactId>
+					<version>1.0.14.7</version>
+					<scope>provided</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.hibernate</groupId>
+					<artifactId>hibernate-core</artifactId>
+					<scope>compile</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-ejb-plugin</artifactId>
+					<configuration>
+						<generateClient>false</generateClient>
+						<ejbVersion>3.2</ejbVersion>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
+		<plugins>
+			<plugin>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<additionalparam>-Xdoclint:none</additionalparam>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencyManagement>
+		<dependencies>
+			<!-- INTERNAS -->
+			<dependency>
+				<groupId>br.com.sicoob.framework</groupId>
+				<artifactId>sicoob-java</artifactId>
+				<version>${versao.sicoob-java}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>br.com.sicoob.framework</groupId>
+				<artifactId>sicoob-was9</artifactId>
+				<version>${versao.sicoob-was}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>br.com.sicoob.framework.portal</groupId>
+				<artifactId>prt-base-sisbr-java</artifactId>
+				<version>${versao.prt-framework}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>br.com.sicoob.framework</groupId>
+				<artifactId>sicoob-test-lib</artifactId>
+				<version>${versao.sicoob-test-lib}</version>
+				<scope>test</scope>
+			</dependency>
+			<!-- INTERNAS -->
+
+			<!-- EXTERNAS -->
+			<dependency>
+				<groupId>javax</groupId>
+				<artifactId>javaee-api</artifactId>
+				<version>7.0</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-core</artifactId>
+				<version>5.0.10.Final</version>
+				<scope>provided</scope>
+			</dependency>
+
+			<!-- TESTES -->
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.11</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>log4j</groupId>
+				<artifactId>log4j</artifactId>
+				<version>1.2.17</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-all</artifactId>
+				<version>1.9.5</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.easymock</groupId>
+				<artifactId>easymock</artifactId>
+				<version>3.1</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.powermock</groupId>
+				<artifactId>powermock-api-easymock</artifactId>
+				<version>1.5.4</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.powermock</groupId>
+				<artifactId>powermock-module-junit4</artifactId>
+				<version>1.5.4</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jmock</groupId>
+				<artifactId>jmock</artifactId>
+				<version>2.5.1</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jmock</groupId>
+				<artifactId>jmock-legacy</artifactId>
+				<version>2.5.1</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.dom4j</groupId>
+				<artifactId>dom4j</artifactId>
+				<version>1.6.1</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.hsqldb</groupId>
+				<artifactId>hsqldb</artifactId>
+				<version>4.3.0.GA</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache</groupId>
+				<artifactId>commons-jexl</artifactId>
+				<version>1.0</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.antlr</groupId>
+				<artifactId>antlr</artifactId>
+				<version>4.2.3.GA</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache</groupId>
+				<artifactId>commons-jelly</artifactId>
+				<version>1.0</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache</groupId>
+				<artifactId>commons-logging</artifactId>
+				<version>1.0.3</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>br.com.sicoob.sws</groupId>
+				<artifactId>sws-emulador</artifactId>
+				<version>1.0.10.15</version>
+				<scope>test</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<modules>
+		<module>Cadastro</module>
+		<module>Comum</module>
+		<module>Processamento</module>
+		<module>WAR</module>
+		<module>EAR</module>
+	</modules>
+
+</project>

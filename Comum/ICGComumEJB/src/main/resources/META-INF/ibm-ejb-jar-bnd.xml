@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejb-jar-bnd xmlns="http://websphere.ibm.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://websphere.ibm.com/xml/ns/javaee http://websphere.ibm.com/xml/ns/javaee/ibm-ejb-jar-bnd_1_1.xsd"
+	version="1.1">
+
+	<session name="ImportacaoArquivoServicoEJB">
+		<interface
+			class="br.com.sicoob.icg.comum.negocio.servicos.interfaces.ImportacaoArquivoServicoLocal"
+			binding-name="ejblocal:icg/comum/ImportaArquivoServico" />
+		<interface
+			class="br.com.sicoob.icg.comum.negocio.servicos.interfaces.ImportacaoArquivoServicoRemote"
+			binding-name="icg/comum/ImportacaoArquivoServicoRemote" />
+	</session>
+
+	<session name="DownloadDominioServicoEJB">
+		<interface
+			class="br.com.sicoob.icg.comum.negocio.servicos.interfaces.DownloadDominioServicoLocal"
+			binding-name="ejblocal:icg/comum/DownloadDominioServico" />
+		<interface
+			class="br.com.sicoob.icg.comum.negocio.servicos.interfaces.DownloadDominioServicoRemote"
+			binding-name="icg/comum/DownloadDominioServicoRemote" />
+	</session>
+
+</ejb-jar-bnd>

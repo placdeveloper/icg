@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>icg-comum-ejb</artifactId>
+	<packaging>ejb</packaging>
+
+	<name>ICG - Comum - ICGComumEJB</name>
+
+	<parent>
+		<groupId>br.com.sicoob.icg</groupId>
+		<artifactId>icg-modulo-comum</artifactId>
+		<version>1.0.0.24-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*.properties</include>
+					<include>**/*.xml</include>
+				</includes>
+			</resource>
+
+			<resource>
+				<directory>comando</directory>
+				<includes>
+					<include>**/*.xml</include>
+				</includes>
+			</resource>
+
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-ejb-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+	<dependencies>
+		<!-- ICG -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>icg-comum-lib</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>icg-entidades</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<!-- ICG -->
+
+		<!-- INTERNAS -->
+
+		<dependency>
+		  <groupId>br.com.sicoob.ged</groupId>
+		  <artifactId>ged-api</artifactId>
+		  <version>${versao.ged.api}</version>
+		  <exclusions>
+		  	<exclusion>
+		  		<groupId>commons-lang</groupId>
+		  		<artifactId>commons-lang</artifactId>
+		  	</exclusion>
+		  </exclusions>
+		</dependency>
+		
+		<dependency>
+			<groupId>br.com.sicoob.framework</groupId>
+			<artifactId>sicoob-java</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>br.com.sicoob.framework</groupId>
+			<artifactId>sicoob-was9</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>br.com.sicoob.capes</groupId>
+			<artifactId>capes-api-inclusao</artifactId>
+			<version>${versao.capes.api}</version>
+		</dependency>
+		<dependency>
+			<groupId>br.com.sicoob.capes</groupId>
+			<artifactId>capes-api</artifactId>
+			<version>${versao.capes.api}</version>
+		</dependency>
+		
+		<!-- INTERNAS -->
+
+		<!-- EXTERNAS -->
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+		</dependency>
+
+		<!-- EXTERNAS -->
+	</dependencies>
+</project>

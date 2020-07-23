@@ -1,0 +1,16 @@
+﻿<?xml version="1.0"?>
+<sisbrweb>
+	<MDIICG>
+
+		<menu id="MNUICGCADSATRO" label="Cadastro" icone="">
+			<item id="MNUIMPORTACAO" label="Importação de arquivos"
+				titulo="Importação de arquivos" swf="/icg/swf/importaarquivocadastro"
+				icone="br/com/bancoob/imagens/icos/modulos/edit" />
+			<item id="MNUDOWNLOADDOMINIO" label="Lista Domínio"
+				titulo="Lista de Domínios" swf="/icg/swf/downloaddominio"
+				icone="br/com/bancoob/imagens/icos/modulos/edit" />
+		</menu>
+
+	</MDIICG>
+	
+</sisbrweb>

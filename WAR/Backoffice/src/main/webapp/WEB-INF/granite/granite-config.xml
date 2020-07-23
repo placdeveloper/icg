@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE granite-config PUBLIC "-//Granite Data Services//DTD granite-config internal//EN" "http://www.graniteds.org/public/dtd/1.1.0/granite-config.dtd">
+
+<granite-config>
+	<invocationlistener type="br.com.sicoob.granite.interceptor.GerenteInterceptor"/>
+	<classgetter type="org.granite.hibernate.HibernateClassGetter" />
+
+	<externalizers>
+		<externalizer type="org.granite.hibernate.HibernateExternalizer">
+			<include annotatedwith="javax.persistence.Entity" />
+			<include annotatedwith="javax.persistence.MappedSuperclass" />
+			<include annotatedwith="javax.persistence.Embeddable" />
+
+			<include instanceof="br.com.bancoob.negocio.dto.BancoobDto" />
+		</externalizer>
+
+		<externalizer type="org.granite.messaging.amf.io.util.externalizer.EnumExternalizer">
+			<include instanceof="java.lang.Enum" />
+		</externalizer>
+	</externalizers>
+
+	<security type="br.com.bancoob.seguranca.autenticacao.servico.ServicoSeguranca" />
+</granite-config>

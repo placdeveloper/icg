@@ -1,0 +1,620 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE queries [
+	<!ELEMENT queries (query*)>
+	<!ELEMENT query (use-case+,description,paginacao?,command+,projecao?,ordenacoes?)>
+	<!ELEMENT use-case    (#PCDATA)>
+	<!ELEMENT description (#PCDATA)>
+	<!ELEMENT command     (#PCDATA)>
+	<!ELEMENT parametros  (#PCDATA)>
+	<!ELEMENT projecao  (#PCDATA)>
+	<!ELEMENT paginar  (#PCDATA)>
+	<!ELEMENT paginacao (#PCDATA)>
+	<!ELEMENT colunaCodigo    (#PCDATA)>
+	<!ELEMENT colunaDescricao    (#PCDATA)>
+	<!ELEMENT numeroOcorrenciasPorPagina    (#PCDATA)>
+	<!ELEMENT primeiraCondicao    (#PCDATA)>
+	<!ELEMENT ascendente    (#PCDATA)>
+	<!ELEMENT ordenacoes (ordenacao+)>
+	<!ELEMENT ordenacao (#PCDATA)>
+	<!ELEMENT sql  (#PCDATA)>
+	<!ATTLIST ordenacao chave CDATA    #REQUIRED>
+	<!ATTLIST ordenacao default CDATA    #IMPLIED>
+	<!ATTLIST command parametros CDATA    #IMPLIED>
+	<!ATTLIST command paginar CDATA    #IMPLIED>
+	<!ATTLIST use-case name CDATA    #REQUIRED>
+	<!ATTLIST query name CDATA    #REQUIRED>
+	<!ATTLIST paginacao colunaCodigo CDATA    #REQUIRED>
+	<!ATTLIST paginacao colunaDescricao CDATA    #REQUIRED>
+	<!ATTLIST paginacao numeroOcorrenciasPorPagina CDATA    #REQUIRED>
+	<!ATTLIST paginacao primeiraCondicao CDATA    #REQUIRED>
+	<!ATTLIST paginacao ascendente CDATA    #REQUIRED>
+	<!ATTLIST paginacao hint CDATA    #REQUIRED>
+	<!ATTLIST paginacao hintAuxiliar CDATA   #IMPLIED>
+]>
+
+  <queries>
+	<query name="ATUALIZA_SITUACAO_PROCESSAMENTO_ARQUIVO">
+		<use-case name="Atualiza a situação e com os possíveis erros de validação " />
+		<description>Atualiza a situação e com os possíveis erros de validação
+		</description>
+		<command>
+			<![CDATA[
+				UPDATE ICG.IMPORTAARQUIVO 
+					set 
+					<j:if test="${sbErro != null}">
+						DESCERROPROCESSSAMENTO = <bancoob:valor valor="${sbErro}" tipo="String" />,
+					</j:if> 
+						DATAHORAPROCESSAMENTO = <bancoob:valor valor="${importaArquivo.dataHoraProcessamento}" tipo="Date" />, 
+						CODSITUACAOPROCESSAMENTO = <bancoob:valor valor="${importaArquivo.codigoSituacaoProcessamento}" />
+				WHERE IDIMPORTAARQUIVO = <bancoob:valor valor="${importaArquivo.idImportaArquivo}" tipo="Integer" />
+			]]>
+		</command>
+	</query>
+	
+	<query name="LISTA_TODOS_ARQUIVOS_IMPORTADOS">
+		<use-case name="Lista arquivos importados" />
+		<description>Lista todos os arquivos importados que ainda não foram processados
+		</description>
+		<command>
+			<![CDATA[
+			SELECT
+			    imp.IDIMPORTAARQUIVO,
+			    imp.NOMEARQUIVO,
+			    imp.NOMEARQUIVODIRETORIO,
+			    imp.DESCDIRETORIO,
+			    imp.DATAHORAIMPORTACAO,
+			    imp.CODTIPOARQUIVOIMPORTACAO,
+			    imp.CODSITUACAOPROCESSAMENTO,
+			    imp.IDUSUARIO,
+			    imp.DESCERROPROCESSSAMENTO,
+			    imp.IDINSTITUICAO
+
+			FROM
+			    ICG.IMPORTAARQUIVO imp
+			where 
+				imp.CODSITUACAOPROCESSAMENTO = <bancoob:valor valor="${situacaoProcessamento}" />
+				<j:if test="${criterios.codigoTipoArquivo != null}">
+					AND CODTIPOARQUIVOIMPORTACAO = <bancoob:valor valor="${criterios.codigoTipoArquivo}" />  
+				</j:if> 
+			 
+			
+			]]>
+		</command>
+	</query>
+	
+	<query name="INCLUIR_ENDERECO_PARA_PROCESSAMENTO">
+		<use-case name="Inlui os dados de endereço que será processado  " />
+		<description>Inlui os dados de endereço que será processado
+		</description>
+		<command>
+			<![CDATA[
+			INSERT INTO ICG.ENDERECOPESSOAIMPORTACAO (CODTIPOENDERECO, CODCEP, NOMEBAIRRO, DESCLOGRADOURO, DESCNUMERO, DESCCOMPLEMENTO, NUMCPFCNPJ, IDIMPORTAARQUIVO, CODSITUACAOPROCESSAMENTO, IDInstituicao, IDLOCALIDADE, IDTIPOLOGRADOURO, DESCLINHAARQUIVO)
+			VALUES ( <bancoob:valor valor="${enderecoVO.codigoTipoEndereco}" />, 
+					 <bancoob:valor valor="${enderecoVO.cep}" />, 
+					 <bancoob:valor valor="${enderecoVO.bairro}" />, 
+					 <bancoob:valor valor="${enderecoVO.logradouro}" />, 
+					 <bancoob:valor valor="${enderecoVO.numero}" />, 
+					 <bancoob:valor valor="${enderecoVO.complemento}" />, 
+					 <bancoob:valor valor="${enderecoVO.cpfCnpj}" />, 
+					 <bancoob:valor valor="${importaArquivo.idImportaArquivo}" />, 
+					 <bancoob:valor valor="${stProcessado}" />,
+					 <bancoob:valor valor="${enderecoVO.instituicao}" />,
+					 <bancoob:valor valor="${enderecoVO.codigoLocalidade}" />,
+					 <bancoob:valor valor="${enderecoVO.codigoTipoLogradouro}" />, 
+					 <bancoob:valor valor="${enderecoVO.linhaArquivo}" />)
+
+			]]>
+		</command>
+	</query>
+	
+	<query name="LISTA_ENREDECOS_PARA_ATUALIZAR">
+		<use-case name="Lista os endereços que serão atualizados na base do capes" />
+		<description>Lista os endereços que serão atualizados na base do capes
+		</description>
+		<command>
+			<![CDATA[
+				SELECT 
+						em.IDENDERECO,
+				        em.CODCEP,
+				        em.CODTIPOENDERECO,
+				        em.NUMCPFCNPJ,
+				        em.DESCCOMPLEMENTO,
+				        em.DESCLOGRADOURO,
+				        em.IDIMPORTAARQUIVO,
+				        em.NOMEBAIRRO,
+				        em.DESCNUMERO,
+				        em.IDInstituicao,
+				        em.IDLOCALIDADE,
+				        em.IDTIPOLOGRADOURO
+				FROM 
+				ICG.ENDERECOPESSOAIMPORTACAO em
+				INNER JOIN ICG.IMPORTAARQUIVO im on im.IDIMPORTAARQUIVO = em.IDIMPORTAARQUIVO
+				WHERE em.CODSITUACAOPROCESSAMENTO = <bancoob:valor valor="${situacaoProcessamentoEndereco}" />  
+				ORDER BY em.IDIMPORTAARQUIVO
+			
+			]]>
+		</command>
+	</query>
+
+	<query name="LISTA_ENDERECOS_PESSOA_COMPARTILHAMENTO">
+		<use-case name="Lista os endereços relacionados da pessoa compartilhamento" />
+		<description>Lista os endereços relacionados da pessoa compartilhamento
+		</description>
+		<command>
+			<![CDATA[
+				SELECT DISTINCT
+				        EM.IDENDERECOPESSOA,
+				        EM.CODCEP,
+				        EM.CODTIPOENDERECO,
+				        EM.DESCCOMPLEMENTO,
+				        EM.DESCLOGRADOURO,
+				        EM.DESCNUMERO,
+				        EM.IDLOCALIDADE,
+				        EM.IDTIPOLOGRADOURO,
+				        EM.NOMEBAIRRO,
+						TP.IDINSTITUICAO, 
+						PC.IDPESSOACOMPARTILHAMENTO, 
+						P.NUMCPFCNPJ, 
+						PC.NOMEPESSOA, 
+						P.IDPESSOA
+				FROM ICG.PESSOA P
+				INNER JOIN ICG.PESSOACOMPARTILHAMENTO PC ON P.IDPESSOA = PC.IDPESSOA
+				INNER JOIN ICG.TRANSICAOPESSOA TP ON TP.IDPESSOACOMPARTILHAMENTO = PC.IDPESSOACOMPARTILHAMENTO
+				INNER JOIN ICG.ENDERECOPESSOA EM ON EM.IDPESSOACOMPARTILHAMENTO = PC.IDPESSOACOMPARTILHAMENTO
+				INNER JOIN ICG.ENDERECOPESSOAIMPORTACAO EP ON P.NUMCPFCNPJ = EP.NUMCPFCNPJ
+				WHERE EM.IDPESSOACOMPARTILHAMENTO = <bancoob:valor valor="${idPessoaCompartilahemnto}" /> AND 
+					  TP.IDINSTITUICAO = <bancoob:valor valor="${idInstituicao}" />
+			
+			]]>
+		</command>
+	</query>		
+	
+	<query name="CONSULTA_PESSOACOMPARTILHAMENTO">
+		<use-case name="Consulta os dados do pessoa compartilhamento" />
+		<description>Consulta os dados do pessoa compartilhamento
+		</description>
+		<command>
+			<![CDATA[
+
+				SELECT DISTINCT PC.IDPESSOACOMPARTILHAMENTO, P.NUMCPFCNPJ, PC.NOMEPESSOA , P.IDPESSOA, VI.IDINSTITUICAO
+				FROM ICG.PESSOA P
+				INNER JOIN ICG.PESSOACOMPARTILHAMENTO PC ON P.IDPESSOA = PC.IDPESSOA
+				INNER JOIN ICG.TRANSICAOPESSOA TP ON TP.IDPESSOACOMPARTILHAMENTO = PC.IDPESSOACOMPARTILHAMENTO
+				INNER JOIN sci.VIW_INSTITUICAO VI ON VI.IDINSTITUICAO = TP.IDINSTITUICAO
+				WHERE P.NUMCPFCNPJ = <bancoob:valor valor="${cpfCnpj}" /> AND 
+					  VI.NUMCOOPERATIVA = <bancoob:valor valor="${numeroCooperativa}" />
+			
+			]]>
+		</command>
+	</query>		
+	
+	<query name="ATUALIZA_SITUACAO_PROCESSAMENTO_ENDERECO">
+		<use-case name="Atualiza a situação do registro de endereco " />
+		<description>Atualiza a situação do registro de endereco
+		</description>
+		<command>
+			<![CDATA[
+				UPDATE ICG.ENDERECOPESSOAIMPORTACAO 
+				SET CODSITUACAOPROCESSAMENTO = <bancoob:valor valor="${enderecoVO.situacaoProcessamento}"/>, 
+					DESCERROPROCESSAMENTO = <bancoob:valor valor="${enderecoVO.erroProcessamento}" tipo="String" />,
+					DATAHORAPROCESSADO = CURRENT_TIMESTAMP
+				WHERE IDENDERECO = <bancoob:valor valor="${enderecoVO.id}" tipo="Integer" />
+			]]>
+		</command>
+	</query>
+	
+	<query name="INCLUIR_PESSOA_FISICA_PARA_PROCESSAMENTO">
+		<use-case name="Inlui os dados da pessoa fisica que será processada" />
+		<description>Inlui os dados da pessoa fisica que será processada
+		</description>
+		<command>
+			<![CDATA[
+			INSERT INTO ICG.PESSOAFISICAIMPORTACAO (NUMCPFCNPJ, NOMEPESSOA, NOMECOMPLETO, CODATIVIDADEECONOMICA, CODTIPOPESSOA, DATANASCIMENTO, BOLMENOREMANCIPADO,
+													NOMEPAI, NOMEMAE, CODTIPODOCUMENTOIDENTIFICACAO, NUMDOCUMENTOIDENTIFICACAO, DESCORGAOEXPDOCUMENTOIDENTIFICACAO,
+													SIGLAUFORGEXPDOCUMENTOIDENTIFICACAO, DATAEMISSAODOCUMENTOIDENTIFICACAO, CODTIPOSEXO, IDOCUPACAOPROFISSIONAL,
+													CODESTADOCIVIL, BOLUNIAOESTAVEL, CODGRAUINSTRUCAO, IDNATURALIDADE, DESCNATURALIDADE, CODVINCULOEMPREGATICIO,
+													CODNACIONALIDADE, NUMCPFCONJUGE, QTDDEPENDENTE, CODREGIMECASAMENTO, CODSITUACAOPROCESSAMENTO, IDIMPORTAARQUIVO, 
+													IDINSTITUICAO, IDINSTITUICAOCONJUGE, DESCLINHAARQUIVO)
+			VALUES (		 <bancoob:valor valor="${pessoaFisicaVO.cpfCnpj}" />, 
+							 <bancoob:valor valor="${pessoaFisicaVO.nomePessoa}" />, 
+							 <bancoob:valor valor="${pessoaFisicaVO.nomeCompleto}" />, 
+							 <bancoob:valor valor="${pessoaFisicaVO.codigoAtividadeEconomica}" />, 
+							 <bancoob:valor valor="${pessoaFisicaVO.codigoTipoPessoa}" />, 
+							 <bancoob:valor valor="${pessoaFisicaVO.dataNascimento}" />, 
+							 <bancoob:valor valor="${pessoaFisicaVO.menorEmancipado}" />, 
+							 
+							 <bancoob:valor valor="${pessoaFisicaVO.nomePai}" />, 
+							 <bancoob:valor valor="${pessoaFisicaVO.nomeMae}" />, 
+							 <bancoob:valor valor="${pessoaFisicaVO.codigoTipoDocumento}" />, 
+							 <bancoob:valor valor="${pessoaFisicaVO.numeroDocumento}" />, 
+							 <bancoob:valor valor="${pessoaFisicaVO.orgaoExpedidorDocumento}" />, 
+							 
+							 <bancoob:valor valor="${pessoaFisicaVO.ufOrgaoExpedidorDocumento}" />, 
+							 <bancoob:valor valor="${pessoaFisicaVO.dataEmissaoDocumento}" />, 
+							 <bancoob:valor valor="${pessoaFisicaVO.tipoSexo}" />, 
+							 <bancoob:valor valor="${pessoaFisicaVO.codigoOcupacaoProfissional}" />, 
+							 
+							 <bancoob:valor valor="${pessoaFisicaVO.codigoEstadoCivil}" />, 
+							 <bancoob:valor valor="${pessoaFisicaVO.uniaoEstavel}" />, 
+							 <bancoob:valor valor="${pessoaFisicaVO.codigoGrauInstrucao}" />, 
+							 <bancoob:valor valor="${pessoaFisicaVO.codigoNaturalidade}" />, 
+							 <bancoob:valor valor="${pessoaFisicaVO.descNaturalidade}" />, 
+							 <bancoob:valor valor="${pessoaFisicaVO.codigoVinculoEmpregaticio}" />, 
+
+							 <bancoob:valor valor="${pessoaFisicaVO.codigoNacionalidade}" />, 
+							 <bancoob:valor valor="${pessoaFisicaVO.cpfConjuge}" />, 
+							 <bancoob:valor valor="${pessoaFisicaVO.quantidadeDependentes}" />, 
+							 <bancoob:valor valor="${pessoaFisicaVO.codigoRegimeCasamento}" />, 
+							 <bancoob:valor valor="${stProcessado}" />,
+							 <bancoob:valor valor="${importaArquivo.idImportaArquivo}" />,
+							 
+							 <bancoob:valor valor="${pessoaFisicaVO.instituicao}" />, 
+							 <bancoob:valor valor="${pessoaFisicaVO.idInstituicaoConjuge}" />, 
+							 <bancoob:valor valor="${pessoaFisicaVO.linhaArquivo}" />)
+
+			]]>
+		</command>
+	</query>
+
+	<query name="LISTA_PESSOAS_FISICA_PARA_ATUALIZAR">
+		<use-case name="Lista as pessoas fisicas que serão atualizados na base do capes" />
+		<description>Lista as pessoas fisicas que serão atualizados na base do capes
+		</description>
+		<command>
+			<![CDATA[
+				SELECT 
+					pfi.IDPESSOAFISICA,
+					pfi.NUMCPFCNPJ,
+					pfi.NOMEPESSOA,
+					pfi.NOMECOMPLETO,
+					pfi.CODATIVIDADEECONOMICA,
+					pfi.CODTIPOPESSOA,
+					pfi.DATANASCIMENTO,
+					pfi.BOLMENOREMANCIPADO,
+					pfi.NOMEPAI,
+					pfi.NOMEMAE,
+					pfi.CODTIPODOCUMENTOIDENTIFICACAO,
+					pfi.NUMDOCUMENTOIDENTIFICACAO,
+					pfi.DESCORGAOEXPDOCUMENTOIDENTIFICACAO,
+					pfi.SIGLAUFORGEXPDOCUMENTOIDENTIFICACAO,
+					pfi.DATAEMISSAODOCUMENTOIDENTIFICACAO,
+					pfi.CODTIPOSEXO,
+					pfi.IDOCUPACAOPROFISSIONAL, 
+					pfi.CODESTADOCIVIL, 
+					pfi.BOLUNIAOESTAVEL,
+					pfi.CODGRAUINSTRUCAO,
+					pfi.IDNATURALIDADE,
+					pfi.DESCNATURALIDADE,
+					pfi.CODVINCULOEMPREGATICIO,
+					pfi.CODNACIONALIDADE,
+					pfi.NUMCPFCONJUGE,
+					pfi.QTDDEPENDENTE,
+					pfi.CODREGIMECASAMENTO,
+					pfi.IDINSTITUICAO,
+					pfi.IDIMPORTAARQUIVO,
+					pfi.IDINSTITUICAOCONJUGE   
+				FROM 
+					ICG.PESSOAFISICAIMPORTACAO pfi
+					INNER JOIN ICG.IMPORTAARQUIVO im on im.IDIMPORTAARQUIVO = pfi.IDIMPORTAARQUIVO
+			WHERE pfi.CODSITUACAOPROCESSAMENTO = <bancoob:valor valor="${situacaoProcessamentoPessoaFisica}" />  
+			ORDER BY pfi.IDIMPORTAARQUIVO
+			
+			]]>
+		</command>
+	</query>
+	
+	<query name="ATUALIZA_SITUACAO_PROCESSAMENTO_PESSOA_FISICA">
+		<use-case name="Atualiza a situação do registro de pessoa fisica " />
+		<description>Atualiza a situação do registro de pessoa fisica
+		</description>
+		<command>
+			<![CDATA[
+				UPDATE ICG.PESSOAFISICAIMPORTACAO 
+				SET CODSITUACAOPROCESSAMENTO = <bancoob:valor valor="${pessoaFisicaVO.situacaoProcessamento}"/>, 
+					DESCERROPROCESSAMENTO = <bancoob:valor valor="${pessoaFisicaVO.erroProcessamento}" tipo="String" />,
+					DATAHORAPROCESSADO = CURRENT_TIMESTAMP
+				WHERE IDPESSOAFISICA = <bancoob:valor valor="${pessoaFisicaVO.id}" tipo="Integer" />
+			]]>
+		</command>
+	</query>
+		
+	<query name="INCLUIR_PESSOA_JURIDICA_PARA_PROCESSAMENTO">
+		<use-case name="Inlui os dados da pessoa jurídica que será processada" />
+		<description>Inlui os dados da pessoa jurídica que será processada
+		</description>
+		<command>
+			<![CDATA[
+				INSERT  INTO ICG.PESSOAJURIDICAIMPORTACAO
+				    (NUMCPFCNPJ, NOMERAZAOSOCIAL, NOMERAZAOSOCIALCOMPLETO, CODATIVIDADEECONOMICA, DATACONSTITUICAO, NUMREGISTROJUNTACOMERCIAL, DATAREGISTROJUNTACOMERCIAL,
+						CODESFERAADMINISTRATIVA, CODSITUACAOPROCESSAMENTO, IDIMPORTAARQUIVO, IDINSTITUICAO, CODTIPOPESSOA, DESCLINHAARQUIVO
+				    )
+			VALUES (		 <bancoob:valor valor="${pessoaJuridicaVO.cpfCnpj}" />, 
+							 <bancoob:valor valor="${pessoaJuridicaVO.nomePessoa}" />, 
+							 <bancoob:valor valor="${pessoaJuridicaVO.nomeCompleto}" />, 
+							 <bancoob:valor valor="${pessoaJuridicaVO.codigoAtividadeEconomica}" />, 
+							 <bancoob:valor valor="${pessoaJuridicaVO.dataConstituicao}" />, 
+							 <bancoob:valor valor="${pessoaJuridicaVO.numeroRegistroJuntaComercial}" />, 
+							 <bancoob:valor valor="${pessoaJuridicaVO.dataRegistroJuntaComercial}" />, 
+							 
+							 <bancoob:valor valor="${pessoaJuridicaVO.codigoEsferaAdministrativa}" />, 
+							 <bancoob:valor valor="${stProcessado}" />,
+							 <bancoob:valor valor="${importaArquivo.idImportaArquivo}" />,
+							 <bancoob:valor valor="${pessoaJuridicaVO.instituicao}" />, 
+							 <bancoob:valor valor="${pessoaJuridicaVO.codigoTipoPessoa}" />, 
+							 <bancoob:valor valor="${pessoaJuridicaVO.linhaArquivo}" />)
+
+			]]>
+		</command>
+	</query>
+		
+
+	<query name="LISTA_PESSOAS_JURIDICA_PARA_ATUALIZAR">
+		<use-case name="Lista as pessoas jurídicas que serão atualizados na base do capes" />
+		<description>Lista as pessoas jurídicas que serão atualizados na base do capes
+		</description>
+		<command>
+			<![CDATA[
+			SELECT 
+			        pji.IDPESSOAJURIDICA, pji.NUMCPFCNPJ, pji.NOMERAZAOSOCIAL, pji.NOMERAZAOSOCIALCOMPLETO, pji.CODATIVIDADEECONOMICA, 
+			        pji.DATACONSTITUICAO, pji.NUMREGISTROJUNTACOMERCIAL, pji.DATAREGISTROJUNTACOMERCIAL, 
+			        pji.CODESFERAADMINISTRATIVA, pji.DATAHORAPROCESSADO, pji.CODSITUACAOPROCESSAMENTO, pji.DESCERROPROCESSAMENTO, 
+			        pji.IDIMPORTAARQUIVO, pji.IDINSTITUICAO, PJI.CODTIPOPESSOA
+			FROM ICG.PESSOAJURIDICAIMPORTACAO pji
+			INNER JOIN ICG.IMPORTAARQUIVO im on im.IDIMPORTAARQUIVO = pji.IDIMPORTAARQUIVO
+			WHERE pji.CODSITUACAOPROCESSAMENTO = <bancoob:valor valor="${situacaoProcessamentoPessoaJuridica}" />  
+			ORDER BY pji.IDIMPORTAARQUIVO
+			
+			]]>
+		</command>
+	</query>
+		
+	<query name="ATUALIZA_SITUACAO_PROCESSAMENTO_PESSOA_JURIDICA">
+		<use-case name="Atualiza a situação do registro de pessoa juridica " />
+		<description>Atualiza a situação do registro de pessoa juridica
+		</description>
+		<command>
+			<![CDATA[
+				UPDATE ICG.PESSOAJURIDICAIMPORTACAO 
+				SET CODSITUACAOPROCESSAMENTO = <bancoob:valor valor="${pessoaJuridicaVO.situacaoProcessamento}"/>, 
+					DESCERROPROCESSAMENTO = <bancoob:valor valor="${pessoaJuridicaVO.erroProcessamento}" tipo="String" />,
+					DATAHORAPROCESSADO = CURRENT_TIMESTAMP
+				WHERE IDPESSOAJURIDICA = <bancoob:valor valor="${pessoaJuridicaVO.id}" tipo="Integer" />
+			]]>
+		</command>
+	</query>
+		
+	<query name="INCLUIR_TELEFONE_PARA_PROCESSAMENTO">
+		<use-case name="Inlui os dados do telefone que será processado  " />
+		<description>Inclui os dados do telefone que será processado
+		</description>
+		<command>
+			<![CDATA[
+			INSERT INTO ICG.TELEFONEPESSOAIMPORTACAO (NUMCPFCNPJ, CODTIPOPESSOA, CODTIPOTELEFONE, NUMDDD, NUMTELEFONE, 
+													 NUMRAMAL, IDINSTITUICAO, DESCOBSERVACAO, IDIMPORTAARQUIVO, CODSITUACAOPROCESSAMENTO, DESCLINHAARQUIVO)
+
+			VALUES (		 <bancoob:valor valor="${telefoneVO.cpfCnpj}" />, 
+							 <bancoob:valor valor="${telefoneVO.codigoTipoPessoa}" />, 
+							 <bancoob:valor valor="${telefoneVO.codigoTipoTelefone}" />, 
+							 <bancoob:valor valor="${telefoneVO.ddd}" />, 
+							 <bancoob:valor valor="${telefoneVO.telefone}" />,
+							  
+							 <bancoob:valor valor="${telefoneVO.ramal}" />, 
+							 <bancoob:valor valor="${telefoneVO.instituicao}" />, 
+							 <bancoob:valor valor="${telefoneVO.descObservacao}" />, 
+							 <bancoob:valor valor="${importaArquivo.idImportaArquivo}" />, 
+							 <bancoob:valor valor="${stProcessado}" />,
+							 <bancoob:valor valor="${telefoneVO.linhaArquivo}" /> )
+
+			]]>
+		</command>
+	</query>
+		
+	<query name="LISTA_TELEFONES_PARA_ATUALIZAR">
+		<use-case name="Lista os telefones que serão atualizados na base do capes" />
+		<description>Lista os telefones que serão atualizados na base do capes
+		</description>
+		<command>
+			<![CDATA[
+				SELECT 
+				        tel.IDTELEFONE, tel.NUMCPFCNPJ, tel.CODTIPOPESSOA, tel.CODTIPOTELEFONE, tel.NUMDDD, tel.NUMTELEFONE, 
+				        tel.NUMRAMAL, tel.IDINSTITUICAO, tel.DESCOBSERVACAO, tel.CODSITUACAOPROCESSAMENTO, tel.IDIMPORTAARQUIVO
+				FROM 
+				ICG.TELEFONEPESSOAIMPORTACAO tel
+				INNER JOIN ICG.IMPORTAARQUIVO im on im.IDIMPORTAARQUIVO = tel.IDIMPORTAARQUIVO				
+				WHERE tel.CODSITUACAOPROCESSAMENTO = <bancoob:valor valor="${situacaoProcessamentoTelefone}" />  
+				ORDER BY tel.IDIMPORTAARQUIVO
+			
+			]]>
+		</command>
+	</query>
+		
+	<query name="ATUALIZA_SITUACAO_PROCESSAMENTO_TELEFONE">
+		<use-case name="Atualiza a situação do registro do telefone" />
+		<description>Atualiza a situação do registro do telefone
+		</description>
+		<command>
+			<![CDATA[
+				UPDATE ICG.TELEFONEPESSOAIMPORTACAO 
+				SET CODSITUACAOPROCESSAMENTO = <bancoob:valor valor="${telefoneVO.situacaoProcessamento}"/>, 
+					DESCERROPROCESSAMENTO = <bancoob:valor valor="${telefoneVO.erroProcessamento}" tipo="String" />,
+					DATAHORAPROCESSADO = CURRENT_TIMESTAMP
+				WHERE IDTELEFONE = <bancoob:valor valor="${telefoneVO.id}" tipo="Integer" />
+			]]>
+		</command>
+	</query>
+		
+	<query name="INCLUIR_FONTE_RENDA_PARA_PROCESSAMENTO">
+		<use-case name="Inlui os dados de fonte de renda que será processado  " />
+		<description>Inclui os dados de fonte de renda que será processado
+		</description>
+		<command>
+			<![CDATA[
+			INSERT INTO ICG.FONTERENDAIMPORTACAO (NUMCPFCNPJ, CODTIPOPESSOA, IDINSTITUICAO, CODSITUACAOPROCESSAMENTO, IDIMPORTAARQUIVO, 
+													CODTIPOFONTERENDA, BOLRENDAFIXA, VALORRECEITABRUTAMENSAL, BOLSIMPLESNACIONAL, DATAVALIDADERENDA, DESCLINHAARQUIVO)
+
+			VALUES (		<bancoob:valor valor="${fonteRendaVO.cpfCnpj}" />, 
+							 <bancoob:valor valor="${fonteRendaVO.codigoTipoPessoa}" />, 
+							 <bancoob:valor valor="${fonteRendaVO.instituicao}" />,
+							 <bancoob:valor valor="${stProcessado}" />, 
+							 <bancoob:valor valor="${importaArquivo.idImportaArquivo}" />,
+							  
+							 <bancoob:valor valor="${fonteRendaVO.codigoTipoFonteRenda}" />, 
+							 <bancoob:valor valor="${fonteRendaVO.rendaFixa}" />, 
+							 <bancoob:valor valor="${fonteRendaVO.valorReceitaBrutaMensal}" />,
+							 <bancoob:valor valor="${fonteRendaVO.bolSimplesNacional}" />, 
+							 <bancoob:valor valor="${fonteRendaVO.dataValidadeRenda}" />, 
+							 <bancoob:valor valor="${fonteRendaVO.linhaArquivo}" />)
+
+			]]>
+		</command>
+	</query>
+		
+	<query name="LISTA_FONTE_RENDA_PARA_ATUALIZAR">
+		<use-case name="Lista as fontes de renda que serão atualizados na base do capes" />
+		<description>Lista as fontes de renda  que serão atualizados na base do capes
+		</description>
+		<command>
+			<![CDATA[
+				SELECT 
+				        fri.IDFONTERENDA, fri.NUMCPFCNPJ, fri.CODTIPOPESSOA, fri.IDINSTITUICAO, fri.CODSITUACAOPROCESSAMENTO, 
+				        fri.DATAHORAPROCESSADO, fri.IDIMPORTAARQUIVO, fri.DESCERROPROCESSAMENTO, fri.CODTIPOFONTERENDA, 
+				        fri.BOLRENDAFIXA, fri.VALORRECEITABRUTAMENSAL, fri.BOLSIMPLESNACIONAL, fri.DATAVALIDADERENDA
+				FROM 
+				ICG.FONTERENDAIMPORTACAO fri
+				INNER JOIN ICG.IMPORTAARQUIVO im on im.IDIMPORTAARQUIVO = fri.IDIMPORTAARQUIVO
+				WHERE fri.CODSITUACAOPROCESSAMENTO = <bancoob:valor valor="${situacaoProcessamentoFonteRenda}" />  
+				ORDER BY fri.IDIMPORTAARQUIVO
+			
+			]]>
+		</command>
+	</query>
+
+	<query name="ATUALIZA_SITUACAO_PROCESSAMENTO_FONTE_RENDA">
+		<use-case name="Atualiza a situação do registro de fonte de renda " />
+		<description>Atualiza a situação do registro de fonte de renda
+		</description>
+		<command>
+			<![CDATA[
+				UPDATE ICG.FONTERENDAIMPORTACAO 
+				SET CODSITUACAOPROCESSAMENTO = <bancoob:valor valor="${fonteRendaVO.situacaoProcessamento}"/>, 
+					DESCERROPROCESSAMENTO = <bancoob:valor valor="${fonteRendaVO.erroProcessamento}" tipo="String" />,
+					DATAHORAPROCESSADO = CURRENT_TIMESTAMP
+				WHERE IDFONTERENDA = <bancoob:valor valor="${fonteRendaVO.id}" tipo="Integer" />
+			]]>
+		</command>
+	</query>
+		
+	<query name="INCLUIR_BEM_MOVEL_PARA_PROCESSAMENTO">
+		<use-case name="Inlui os dados de bem movel que será processado  " />
+		<description>Inlui os dados de bem movel que será processado
+		</description>
+		<command>
+			<![CDATA[
+				INSERT INTO ICG.BEMMOVELIMPORTACAO (ID, NUMCPFCNPJ, CODTIPOPESSOA, IDINSTITUICAO, CODSITUACAOPROCESSAMENTO, IDIMPORTAARQUIVO, CODTIPOBEMMOVEL, 
+													DESCBEM, BOLVALORBEMNAOINFORMADO, VALORBEM, CODTIPOCHASSIBEM, NUMCHASSI, ANOFABRICACAOAUTOMOVEL, 
+													ANOMODELOAUTOMOVEL, NUMRENAVAN, DESCPLACA, SIGLAUF, ANOCONSTRUCAOAERONAVE,
+													DESCMATRICULAAERONAVE, ANOCONSTRUCAOEMBARCACAO, DESCINCRICAOEMBARCACAO, CODTIPOESTADOCONSERVACAOBEM, DESCLINHAARQUIVO)
+														
+			VALUES (DEFAULT, <bancoob:valor valor="${bemMovelVO.cpfCnpj}" />, 
+							 <bancoob:valor valor="${bemMovelVO.codigoTipoPessoa}" />, 
+							 <bancoob:valor valor="${bemMovelVO.instituicao}" />, 
+							 <bancoob:valor valor="${stProcessado}" />,
+							 <bancoob:valor valor="${importaArquivo.idImportaArquivo}" />,
+							 <bancoob:valor valor="${bemMovelVO.codigoTipoBem}" />, 
+							 							  
+							 <bancoob:valor valor="${bemMovelVO.descricao}" />, 
+							 <bancoob:valor valor="${bemMovelVO.valorNaoInformado}" />, 
+							 <bancoob:valor valor="${bemMovelVO.valor}" />, 
+							 <bancoob:valor valor="${bemMovelVO.codigoTipoChassi}" />, 
+							 <bancoob:valor valor="${bemMovelVO.numeroChassi}" />,
+							 <bancoob:valor valor="${bemMovelVO.anoFabricacaoAutomovel}" />,
+							 
+							 <bancoob:valor valor="${bemMovelVO.anoModeloAutomovel}" />,
+							 <bancoob:valor valor="${bemMovelVO.renavam}" />,
+							 <bancoob:valor valor="${bemMovelVO.placa}" />,
+							 <bancoob:valor valor="${bemMovelVO.uf}" />,
+							 <bancoob:valor valor="${bemMovelVO.anoConstrucaoAeronave}" />,
+							 
+							 <bancoob:valor valor="${bemMovelVO.matriculaAeronave}" />,
+							 <bancoob:valor valor="${bemMovelVO.anoConstrucaoEmbarcacao}" />,
+							 <bancoob:valor valor="${bemMovelVO.inscricaoEmbarcacao}" />, 
+							 <bancoob:valor valor="${bemMovelVO.codigoTipoEstadoConservacao}" />, 
+							 <bancoob:valor valor="${bemMovelVO.linhaArquivo}" />)
+
+			]]>
+		</command>
+	</query>
+		
+	<query name="LISTA_BEM_MOVEL_PESSOA_PARA_ATUALIZAR">
+		<use-case name="Lista os bens movel que serão atualizados na base do capes" />
+		<description>Lista os bens movel que serão atualizados na base do capes
+		</description>
+		<command>
+			<![CDATA[
+				SELECT 
+			        bmi.ID, bmi.NUMCPFCNPJ, bmi.CODTIPOPESSOA, bmi.IDINSTITUICAO, bmi.IDIMPORTAARQUIVO, bmi.CODTIPOBEMMOVEL, 
+			        bmi.DESCBEM, bmi.BOLVALORBEMNAOINFORMADO, bmi.VALORBEM, bmi.CODTIPOCHASSIBEM, bmi.NUMCHASSI, 
+			        bmi.ANOFABRICACAOAUTOMOVEL, bmi.ANOMODELOAUTOMOVEL, bmi.NUMRENAVAN, bmi.DESCPLACA, bmi.SIGLAUF, 
+			        bmi.ANOCONSTRUCAOAERONAVE, bmi.DESCMATRICULAAERONAVE, bmi.ANOCONSTRUCAOEMBARCACAO, bmi.DESCINCRICAOEMBARCACAO
+				FROM 
+				ICG.BEMMOVELIMPORTACAO bmi
+				INNER JOIN ICG.IMPORTAARQUIVO im on im.IDIMPORTAARQUIVO = bmi.IDIMPORTAARQUIVO
+				WHERE bmi.CODSITUACAOPROCESSAMENTO = <bancoob:valor valor="${situacaoProcessamentoBemMovel}" />  
+				ORDER BY bmi.IDIMPORTAARQUIVO
+			
+			]]>
+		</command>
+	</query>
+		
+	<query name="ATUALIZA_SITUACAO_PROCESSAMENTO_BEM_MOVEL">
+		<use-case name="Atualiza a situação do registro de bem movel " />
+		<description>Atualiza a situação do registro de bem movel
+		</description>
+		<command>
+			<![CDATA[
+				UPDATE ICG.BEMMOVELIMPORTACAO
+				SET CODSITUACAOPROCESSAMENTO = <bancoob:valor valor="${bemMovelPessoaVO.situacaoProcessamento}"/>, 
+					DESCERROPROCESSAMENTO = <bancoob:valor valor="${bemMovelPessoaVO.erroProcessamento}" tipo="String" />,
+					DATAHORAPROCESSADO = CURRENT_TIMESTAMP
+				WHERE ID = <bancoob:valor valor="${bemMovelPessoaVO.id}" tipo="Integer" />
+			]]>
+		</command>
+	</query>
+
+	<query name="INCLUIR_EMAIL_PARA_PROCESSAMENTO">
+		<use-case name="Inlui os dados de email que será processado  " />
+		<description>Inlui os dados de email que será processado
+		</description>
+		<command>
+			<![CDATA[
+			INSERT INTO ICG.EMAILPESSOAIMPORTACAO (NUMCPFCNPJ, CODTIPOPESSOA, CODTIPOEMAIL, DESCEMAIL, IDINSTITUICAO, CODSITUACAOPROCESSAMENTO, IDIMPORTAARQUIVO, DescLinhaArquivo)
+			VALUES ( <bancoob:valor valor="${emailVO.cpfCnpj}" />, 
+					 <bancoob:valor valor="${emailVO.codigoTipoPessoa}" />, 
+					 <bancoob:valor valor="${emailVO.codigoTipoEmail}" />, 
+					 <bancoob:valor valor="${emailVO.email}" />, 
+					 <bancoob:valor valor="${emailVO.instituicao}" />,
+					 <bancoob:valor valor="${stProcessado}" />,
+					 <bancoob:valor valor="${importaArquivo.idImportaArquivo}" />, 
+					 <bancoob:valor valor="${emailVO.linhaArquivo}" />)
+
+			]]>
+		</command>
+	</query>
+		
+	<query name="ATUALIZA_SITUACAO_PROCESSAMENTO_EMAIL">
+		<use-case name="Atualiza a situação do registro de email " />
+		<description>Atualiza a situação do registro de email
+		</description>
+		<command>
+			<![CDATA[
+				UPDATE ICG.EMAILPESSOAIMPORTACAO 
+				SET CODSITUACAOPROCESSAMENTO = <bancoob:valor valor="${emailVO.situacaoProcessamento}"/>, 
+					DESCERROPROCESSAMENTO = <bancoob:valor valor="${emailVO.erroProcessamento}" tipo="String" />,
+					DATAHORAPROCESSADO = CURRENT_TIMESTAMP
+				WHERE IDEMAIL = <bancoob:valor valor="${emailVO.id}" tipo="Integer" />
+			]]>
+		</command>
+	</query>
+			
+</queries>

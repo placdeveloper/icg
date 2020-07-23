@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sisbrweb>
+	<aplicativo id="MDIICG" visivel="1" ativo="1">
+		<nome>Importação Cadastro Geral</nome>
+		<icone>br/com/bancoob/imagens/icos/ListaAplicativos/impt_</icone>
+		<descricao>SICOOB - Importação Cadastro Geral (ICG)</descricao>
+		<destino>servicosJavaICG</destino>
+		<destinoArquivos>destinoArquivosICG</destinoArquivos>
+	</aplicativo>
+
+</sisbrweb>

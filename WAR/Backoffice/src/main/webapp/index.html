@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<title>.: ${project.name} :.</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<style type="text/css">
+		
+			html {
+            	height: 100%;
+        	}
+			
+			body {
+				height: 100%;
+			    background-color: #039E90;
+			}
+			
+			div#cabecalho {
+				display: block;
+				background-color: #00323C;
+				padding: 20px;
+				margin: 0 0 20px 0;
+				text-align: center;
+				font-size: 20px;
+				height: 40px;
+			}
+			
+			div#corpo {
+				display: block;
+				text-align: center;
+				font-size: 40px;
+			}
+			
+			div#body {
+				text-align: center;
+				display: block;
+			}
+			
+			div#metadados {
+				float: right;
+				font-size: 0.8em;
+				text-align: left;
+				margin-top: -8px;
+			}
+			
+			div#artefatos {
+				margin: 5em 0 0 0;
+			}
+			
+			div#artefatos table {
+				margin: 0 auto;
+				font-size: 1.0em;
+				width: 700px;
+			}
+			
+			div#artefatos th {
+				background-color: #00323C;
+				color: #78B826;
+				text-align: left;
+				padding: 5px;
+			}
+			
+			div#artefatos th.titulo {
+				text-transform: uppercase;
+				text-align: center;
+			}
+			
+			div#artefatos td.versao {
+				background-color: #00323C;
+				color: #78B826;
+				text-transform: uppercase;
+				text-align: right;
+			}
+			
+			.rotulo {
+				color: #039E90;
+				font-weight: bold;
+				margin: 0 5px 0 0;
+			}
+			
+			.destaque {
+				color: #78B826;
+				font-weight: normal;
+			}
+			
+			#app.destaque {
+				text-transform: uppercase;
+			}
+			
+			div.titulo {
+				display: inline-block;
+				height: 100%;
+				padding: 10px;
+			}
+			
+			img.logo {
+				vertical-align: middle;
+				float: left;
+			}
+		</style>	
+	</head>
+	
+	<body>
+		<div id="cabecalho">
+		    <img alt="SICOOB" src="img/logo.png" class="logo">
+		    <div class="titulo">
+		        <span id="app" class="destaque">${project.parent.parent.name} - ${project.parent.parent.description}</span>
+		    </div>
+		    <div id="metadados">
+		        <table>
+		            <tr>
+		                <td class="rotulo" align="right">Artefato:</td>
+		                <td class="destaque">${artifactId}</td>
+		            </tr>
+		            <tr>
+		                <td class="rotulo" align="right">Versão:</td>
+		                <td class="destaque">${version}</td>
+		            </tr>
+		            <tr>
+		                <td class="rotulo" align="right">Data:</td>
+		                <td class="destaque">${timestamp}</td>
+		            </tr>
+		        </table>
+		    </div>
+		</div>
+		
+		<div id="corpo">
+			A aplicação "<span id="app" class="destaque">${project.build.finalName}</span>" está no ar!
+		</div>
+		
+		<div id="artefatos">
+	     	<table>
+	     		<tr>
+	     			<th class="titulo" colspan="2">DEPENDÊNCIAS</th>
+    			</tr>
+	     		<tr>
+	     			<th class="titulo">Nome</th>
+	     			<th class="titulo" width="30%">Versão</th>
+    			</tr>
+	     		<tr>
+		      		<th>CAPES - API</th>
+		      		<td class="versao">${versao.capes.api}</td>
+	     		</tr>
+	     		<tr>
+		      		<th>SWS</th>
+		      		<td class="versao">${versao.sws-api}</td>
+	     		</tr>
+	     	</table>
+        </div>
+	
+	</body>
+</html>

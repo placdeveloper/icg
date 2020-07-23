@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd" version="2.1">
+	<persistence-unit name="emImportaCadastro" transaction-type="JTA">
+	
+<!-- 		<provider>org.hibernate.ejb.HibernatePersistence</provider> -->
+		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+		<jta-data-source>jdbc/BancoobImportacaoCadastroGeralDS</jta-data-source>
+				<!-- ENTIDADES -->
+		<class>br.com.sicoob.icg.negocio.entidades.ImportaArquivo</class>
+		<class>br.com.sicoob.icg.negocio.entidades.EmailPessoaImportacao</class>
+		<class>br.com.sicoob.icg.negocio.entidades.EnderecoPessoaImportacao</class>
+		<class>br.com.sicoob.icg.negocio.entidades.FonteRendaImportacao</class>
+		<class>br.com.sicoob.icg.negocio.entidades.PessoaFisicaImportacao</class>
+		<class>br.com.sicoob.icg.negocio.entidades.PessoaJuridicaImportacao</class>
+		<class>br.com.sicoob.icg.negocio.entidades.SituacaoProcessamento</class>
+		<class>br.com.sicoob.icg.negocio.entidades.TelefonePessoaImportacao</class>
+		<class>br.com.sicoob.icg.negocio.entidades.TipoArquivoImportacao</class>
+		
+		
+		<properties>
+			<property name="br.com.bancoob.infraestrutura.conexao.data_source" value="jdbc/BancoobImportacaoCadastroGeralDS" />
+			<property name="hibernate.transaction.manager_lookup_class" value="org.hibernate.transaction.WebSphereExtendedJTATransactionLookup" />
+			<property name="hibernate.dialect" value="org.hibernate.dialect.DB2Dialect" />
+			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.format_sql" value="true" />
+			<property name="hibernate.default_schema" value="CLI" />
+			<property name="hibernate.cache.use_second_level_cache" value="false" />
+			<property name="hibernate.delay_cdi_access" value="true"/>
+			
+			<property name="hibernate.transaction.factory_class" value="org.hibernate.ejb.transaction.JoinableCMTTransactionFactory" />
+			<property name="hibernate.transaction.jta.platform" value="org.hibernate.engine.transaction.jta.platform.internal.WebSphereExtendedJtaPlatform" />
+			
+		</properties>
+	</persistence-unit>
+</persistence>

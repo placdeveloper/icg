@@ -1,0 +1,361 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<services-config>
+	<services>
+
+		<service id="gravity-service" class="flex.messaging.services.MessagingService" messageTypes="flex.messaging.messages.AsyncMessage">
+			<adapters>
+				<adapter-definition id="simple" class="org.granite.gravity.adapters.SimpleServiceAdapter" />
+			</adapters>
+			<destination id="dataTopic">
+				<channels>
+					<channel ref="gravityamf" />
+				</channels>
+				<properties>
+					<scope>session</scope>
+					<source>*</source>
+					<factory>sicoobServiceFactory</factory>
+					<securizer>br.com.bancoob.seguranca.autenticacao.servico.ServicoSeguranca
+					</securizer>
+				</properties>
+				<adapter ref="simple" />
+			</destination>
+		</service>
+
+		<service id="granite-service" class="flex.messaging.services.RemotingService" messageTypes="flex.messaging.messages.RemotingMessage">
+			<destination id="servicosPortalJava">
+				<channels>
+					<channel ref="my-graniteamf" />
+				</channels>
+				<properties>
+					<scope>session</scope>
+					<source>*</source>
+					<factory>sicoobServiceFactory</factory>
+					<securizer>br.com.bancoob.seguranca.autenticacao.servico.ServicoSeguranca
+					</securizer>
+				</properties>
+			</destination>
+
+			<destination id="servicosJava">
+				<channels>
+					<channel ref="my-graniteamf" />
+				</channels>
+				<properties>
+					<scope>session</scope>
+					<source>*</source>
+					<factory>sicoobServiceFactory</factory>
+					<securizer>br.com.bancoob.seguranca.autenticacao.servico.ServicoSeguranca
+					</securizer>
+				</properties>
+			</destination>
+			<destination id="servicosJava-bancoob">
+				<channels>
+					<channel ref="my-graniteamf" />
+				</channels>
+				<properties>
+					<scope>session</scope>
+					<source>*</source>
+					<factory>sicoobServiceFactory</factory>
+					<securizer>br.com.bancoob.seguranca.autenticacao.servico.ServicoSeguranca
+					</securizer>
+				</properties>
+			</destination>
+			<destination id="servicosJava-cooperativa">
+				<channels>
+					<channel ref="my-graniteamf" />
+				</channels>
+				<properties>
+					<scope>session</scope>
+					<source>*</source>
+					<factory>sicoobServiceFactory</factory>
+					<securizer>br.com.bancoob.seguranca.autenticacao.servico.ServicoSeguranca
+					</securizer>
+				</properties>
+			</destination>
+			<destination id="servicosJava-internet">
+				<channels>
+					<channel ref="my-graniteamf" />
+				</channels>
+				<properties>
+					<scope>session</scope>
+					<source>*</source>
+					<factory>sicoobServiceFactory</factory>
+					<securizer>br.com.bancoob.seguranca.autenticacao.servico.ServicoSeguranca
+					</securizer>
+				</properties>
+			</destination>
+			<destination id="servicosJava-intranet">
+				<channels>
+					<channel ref="my-graniteamf" />
+				</channels>
+				<properties>
+					<scope>session</scope>
+					<source>*</source>
+					<factory>sicoobServiceFactory</factory>
+					<securizer>br.com.bancoob.seguranca.autenticacao.servico.ServicoSeguranca
+					</securizer>
+				</properties>
+			</destination>
+			<destination id="servicosJava-vpn1">
+				<channels>
+					<channel ref="my-graniteamf" />
+				</channels>
+				<properties>
+					<scope>session</scope>
+					<source>*</source>
+					<factory>sicoobServiceFactory</factory>
+					<securizer>br.com.bancoob.seguranca.autenticacao.servico.ServicoSeguranca
+					</securizer>
+				</properties>
+			</destination>
+			<destination id="servicosJava-cps">
+				<channels>
+					<channel ref="my-graniteamf" />
+				</channels>
+				<properties>
+					<scope>session</scope>
+					<source>*</source>
+					<factory>sicoobServiceFactory</factory>
+					<securizer>br.com.bancoob.seguranca.autenticacao.servico.ServicoSeguranca
+					</securizer>
+				</properties>
+			</destination>
+
+			<!-- ICG -->
+			<destination id="servicosJavaICG">
+				<channels>
+					<channel ref="my-graniteamf" />
+				</channels>
+				<properties>
+					<scope>session</scope>
+					<source>*</source>
+					<factory>sicoobServiceFactory</factory>
+					<securizer>br.com.bancoob.seguranca.autenticacao.servico.ServicoSeguranca
+					</securizer>
+				</properties>
+			</destination>
+			<destination id="servicosJavaICG-bancoob">
+				<channels>
+					<channel ref="my-graniteamf" />
+				</channels>
+				<properties>
+					<scope>session</scope>
+					<source>*</source>
+					<factory>sicoobServiceFactory</factory>
+					<securizer>br.com.bancoob.seguranca.autenticacao.servico.ServicoSeguranca
+					</securizer>
+				</properties>
+			</destination>
+			<destination id="servicosJavaICG-cooperativa">
+				<channels>
+					<channel ref="my-graniteamf" />
+				</channels>
+				<properties>
+					<scope>session</scope>
+					<source>*</source>
+					<factory>sicoobServiceFactory</factory>
+					<securizer>br.com.bancoob.seguranca.autenticacao.servico.ServicoSeguranca
+					</securizer>
+				</properties>
+			</destination>
+			<destination id="servicosJavaICG-internet">
+				<channels>
+					<channel ref="my-graniteamf" />
+				</channels>
+				<properties>
+					<scope>session</scope>
+					<source>*</source>
+					<factory>sicoobServiceFactory</factory>
+					<securizer>br.com.bancoob.seguranca.autenticacao.servico.ServicoSeguranca
+					</securizer>
+				</properties>
+			</destination>
+			<destination id="servicosJavaICG-intranet">
+				<channels>
+					<channel ref="my-graniteamf" />
+				</channels>
+				<properties>
+					<scope>session</scope>
+					<source>*</source>
+					<factory>sicoobServiceFactory</factory>
+					<securizer>br.com.bancoob.seguranca.autenticacao.servico.ServicoSeguranca
+					</securizer>
+				</properties>
+			</destination>
+			<destination id="servicosJavaICG-vpn1">
+				<channels>
+					<channel ref="my-graniteamf" />
+				</channels>
+				<properties>
+					<scope>session</scope>
+					<source>*</source>
+					<factory>sicoobServiceFactory</factory>
+					<securizer>br.com.bancoob.seguranca.autenticacao.servico.ServicoSeguranca
+					</securizer>
+				</properties>
+			</destination>
+			<destination id="servicosJavaICG-cps">
+				<channels>
+					<channel ref="my-graniteamf" />
+				</channels>
+				<properties>
+					<scope>session</scope>
+					<source>*</source>
+					<factory>sicoobServiceFactory</factory>
+					<securizer>br.com.bancoob.seguranca.autenticacao.servico.ServicoSeguranca
+					</securizer>
+				</properties>
+			</destination>
+			<!-- CAPES -->
+
+			<destination id="servicosLogin">
+				<channels>
+					<channel ref="my-graniteamf" />
+				</channels>
+				<properties>
+					<scope>session</scope>
+					<source>br.com.bancoob.seguranca.autenticacao.servico.ServicoSeguranca
+					</source>
+					<factory>sicoobServiceFactory</factory>
+				</properties>
+			</destination>
+			<destination id="servicosLogin-bancoob">
+				<channels>
+					<channel ref="my-graniteamf" />
+				</channels>
+				<properties>
+					<scope>session</scope>
+					<source>br.com.bancoob.seguranca.autenticacao.servico.ServicoSeguranca
+					</source>
+					<factory>sicoobServiceFactory</factory>
+				</properties>
+			</destination>
+			<destination id="servicosLogin-cooperativa">
+				<channels>
+					<channel ref="my-graniteamf" />
+				</channels>
+				<properties>
+					<scope>session</scope>
+					<source>br.com.bancoob.seguranca.autenticacao.servico.ServicoSeguranca
+					</source>
+					<factory>sicoobServiceFactory</factory>
+				</properties>
+			</destination>
+			<destination id="servicosLogin-internet">
+				<channels>
+					<channel ref="my-graniteamf" />
+				</channels>
+				<properties>
+					<scope>session</scope>
+					<source>br.com.bancoob.seguranca.autenticacao.servico.ServicoSeguranca
+					</source>
+					<factory>sicoobServiceFactory</factory>
+				</properties>
+			</destination>
+			<destination id="servicosLogin-intranet">
+				<channels>
+					<channel ref="my-graniteamf" />
+				</channels>
+				<properties>
+					<scope>session</scope>
+					<source>br.com.bancoob.seguranca.autenticacao.servico.ServicoSeguranca
+					</source>
+					<factory>sicoobServiceFactory</factory>
+				</properties>
+			</destination>
+			<destination id="servicosLogin-vpn1">
+				<channels>
+					<channel ref="my-graniteamf" />
+				</channels>
+				<properties>
+					<scope>session</scope>
+					<source>br.com.bancoob.seguranca.autenticacao.servico.ServicoSeguranca
+					</source>
+					<factory>sicoobServiceFactory</factory>
+				</properties>
+			</destination>
+			<destination id="servicosLogin-cps">
+				<channels>
+					<channel ref="my-graniteamf" />
+				</channels>
+				<properties>
+					<scope>session</scope>
+					<source>br.com.bancoob.seguranca.autenticacao.servico.ServicoSeguranca
+					</source>
+					<factory>sicoobServiceFactory</factory>
+				</properties>
+			</destination>
+		</service>
+
+		<service id="remoting-service" class="flex.messaging.services.RemotingService" messageTypes="flex.messaging.messages.RemotingMessage">
+			<destination id="local">
+				<channels>
+					<channel ref="ch-local" />
+				</channels>
+				<properties>
+					<source>*</source>
+				</properties>
+
+			</destination>
+
+			<destination id="localssl">
+				<channels>
+					<channel ref="chlocal-ssl" />
+				</channels>
+				<properties>
+					<source>*</source>
+				</properties>
+			</destination>
+
+			<destination id="dest-c1716">
+				<channels>
+					<channel ref="c1716" />
+				</channels>
+				<properties>
+					<source>*</source>
+				</properties>
+			</destination>
+		</service>
+	</services>
+
+	<factories>
+		<factory id="sicoobServiceFactory"
+			class="br.com.sicoob.interceptador.excecao.granite.SicoobServiceFactory">
+			<properties>
+				<service-exception-handler>br.com.sicoob.interceptador.excecao.granite.SicoobServiceExceptionHandler
+				</service-exception-handler>
+			</properties>
+		</factory>
+	</factories>
+
+	<channels>
+		<channel-definition id="ch-local"
+			class="mx.messaging.channels.AMFChannel">
+			<endpoint uri="http://localhost:80/sisbr/Gateway.aspx"
+				class="flex.messaging.endpoints.AMFEndpoint" />
+			<properties>
+				<!-- http://{server.name}:{server.port}/{context.root}/Gateway.aspx <legacy-collection>true</legacy-collection> -->
+			</properties>
+		</channel-definition>
+
+		<channel-definition id="chlocal-ssl" class="mx.messaging.channels.AMFChannel">
+			<endpoint uri="http://localhost:80/sisbr/Gateway.aspx" class="flex.messaging.endpoints.SecureHTTPEndpoint" />
+			<properties>
+			</properties>
+		</channel-definition>
+
+		<channel-definition id="c1716" class="mx.messaging.channels.AMFChannel">
+			<endpoint uri="http://localhost:80/sisbr/Gateway.aspx" class="flex.messaging.endpoints.AMFEndpoint" />
+			<properties>
+			</properties>
+		</channel-definition>
+
+		<channel-definition id="my-graniteamf" class="mx.messaging.channels.AMFChannel">
+			<endpoint uri="http://{server.name}:{server.port}/sisbr/graniteamf/amf"	class="flex.messaging.endpoints.SecureHTTPEndpoint" />
+		</channel-definition>
+
+		<channel-definition id="gravityamf" class="org.granite.gravity.channels.GravityChannel">
+			<endpoint uri="http://{server.name}:{server.port}/sisbr/gravityamf/amf"	class="flex.messaging.endpoints.AMFEndpoint" />
+		</channel-definition>
+
+	</channels>
+</services-config>

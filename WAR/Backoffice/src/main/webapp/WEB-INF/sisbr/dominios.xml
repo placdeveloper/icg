@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sisbrweb>
+
+	<dominio id="BANCOOB_DF">
+		<caminhoLDAP>LDAP://BANCOOB.BR/DC=BANCOOB,DC=BR</caminhoLDAP>
+		<servidor>sdfdc02</servidor>
+	</dominio>
+
+	<dominio id="HOMOLOGACAO">
+		<caminhoLDAP>LDAP://HOMOLOGACAO.COM.BR/DC=HOMOLOGACAO,DC=com,DC=BR
+		</caminhoLDAP>
+		<servidor>homol-dc01</servidor>
+	</dominio>
+
+	<dominio id="SICOOB">
+		<caminhoLDAP>LDAP://SICOOB.COM.BR/DC=SICOOB,DC=COM,DC=BR</caminhoLDAP>
+		<servidor>sdfdc01</servidor>
+	</dominio>
+
+</sisbrweb>

@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<upload>
+		<servidorUpload
+			local="http://testeintegrado.sicoob.com.br/sisbr/"
+			bancoob="http://testeintegrado.sicoob.com.br/sisbr/"
+			cooperativa="http://testeintegrado.sicoob.com.br/sisbr/"
+			internet="http://testeintegrado.sicoob.com.br/sisbr/"
+			intranet="http://testeintegrado.sicoob.com.br/sisbr/"
+			cps="http://testeintegrado.sicoob.com.br/sisbr/"
+
+			local_java="http://localhost:8080/sisbr/"
+			bancoob_java="http://localhost:8080/sisbr/"
+			cooperativa_java="http://localhost:8080/sisbr/"
+			internet_java="http://localhost:8080/sisbr/"
+			intranet_java="http://localhost:8080/sisbr/"
+			cps_java="http://localhost:8080/sisbr/" localGravacao="{LOCAL}" />
+	</upload>
+
+	<destinos>
+	
+		<servicosJava tipo="JAVA" local="servicosJavaICG"
+			local-srv="http://localhost:8080/sisbr/"
+			local-ep="{srv}graniteamf/amf" local-push-destination="dataTopic"
+			local-push="http://localhost:8080/sisbr/gravityamf/amf"
+			local-ssl="0" bancoob="servicosJava-bancoob"
+			bancoob-srv="http://localhost:8080/sisbr/"
+			bancoob-ep="{srv}graniteamf/amf" bancoob-push-destination="dataTopic"
+			bancoob-push="http://localhost:8080/sisbr/gravityamf/amf"
+			bancoob-ssl="0" cooperativa="servicosJava-cooperativa"
+			cooperativa-srv="http://localhost:8080/sisbr/"
+			cooperativa-ep="{srv}graniteamf/amf"
+			cooperativa-push-destination="dataTopic"
+			cooperativa-push="http://localhost:8080/sisbr/gravityamf/amf"
+			cooperativa-ssl="0" internet="servicosJava-internet"
+			internet-srv="http://localhost:8080/sisbr/"
+			internet-ep="{srv}graniteamf/amf"
+			internet-push-destination="dataTopic"
+			internet-push="{srv}gravityamf/amf" internet-ssl="0"
+
+			intranet="servicosJava-intranet"
+			intranet-srv="http://localhost:8080/sisbr/"
+			intranet-ep="{srv}graniteamf/amf"
+			intranet-push-destination="dataTopic"
+			intranet-push="{srv}gravityamf/amf" intranet-ssl="0"
+
+			cps="servicosJava-cps"
+			cps-srv="http://localhost:8080/sisbr/"
+			cps-ep="{srv}graniteamf/amf" cps-push-destination="dataTopic"
+			cps-push="{srv}gravityamf/amf" cps-ssl="0">
+
+			<upload urlUpload="UploadArquivos"
+
+				local="http://localhost:8080/sisbr/"
+				bancoob="http://localhost:8080/sisbr/"
+				cooperativa="http://localhost:8080/sisbr/"
+				internet="http://localhost:8080/sisbr/"
+				intranet="http://localhost:8080/sisbr/"
+				cps="http://localhost:8080/sisbr/" />
+		</servicosJava>
+	
+	</destinos>
+</config>

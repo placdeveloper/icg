@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+	<display-name>ICG</display-name>
+
+	<filter>
+		<filter-name>JAASLoginFilter</filter-name>
+		<filter-class>br.com.bancoob.seguranca.infraestrutura.filtros.JAASLoginFilter</filter-class>
+	</filter>
+
+	<filter>
+		<filter-name>MonitoracaoFilter</filter-name>
+		<filter-class>br.com.sicoob.sisbr.monitoracao.MonitoracaoFilter</filter-class>
+	</filter>
+
+	<filter>
+		<filter-name>AMFMessageFilter</filter-name>
+		<filter-class>org.granite.messaging.webapp.AMFMessageFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>JAASLoginFilter</filter-name>
+		<url-pattern>/graniteamf/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>JAASLoginFilter</filter-name>
+		<url-pattern>/DownloadArquivos</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>JAASLoginFilter</filter-name>
+		<url-pattern>/UploadArquivos</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>MonitoracaoFilter</filter-name>
+		<url-pattern>/graniteamf/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>AMFMessageFilter</filter-name>
+		<url-pattern>/graniteamf/*</url-pattern>
+	</filter-mapping>
+
+	<listener>
+		<listener-class>org.granite.config.GraniteConfigListener</listener-class>
+	</listener>
+
+	<servlet>
+		<servlet-name>AMFMessageServlet</servlet-name>
+		<servlet-class>org.granite.messaging.webapp.AMFMessageServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet>
+		<servlet-name>ServletDownloadArquivos</servlet-name>
+		<servlet-class>br.com.sicoob.sisbrweb.arquivos.servlet.ServletDownloadArquivos</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet>
+		<servlet-name>ServletUploadArquivos</servlet-name>
+		<servlet-class>br.com.sicoob.sisbrweb.arquivos.servlet.ServletUploadArquivos</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<!-- 
+	<servlet> 
+		<servlet-name>VisualizadorArquivo</servlet-name>
+		<servlet-class>br.com.sicoob.sisbr.controleVersao.servlet.VisualizadorArquivo</servlet-class> 
+		<load-on-startup>1</load-on-startup> 
+	</servlet> 
+	-->
+
+	<servlet>
+		<servlet-name>VisualizacaoArquivo</servlet-name>
+		<servlet-class>br.com.bancoob.sisbrweb.servlets.VisualizacaoArquivo</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>VisualizacaoArquivo</servlet-name>
+		<url-pattern>/VisualizacaoArquivo</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>AMFMessageServlet</servlet-name>
+		<url-pattern>/graniteamf/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>ServletDownloadArquivos</servlet-name>
+		<url-pattern>/DownloadArquivos</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>ServletUploadArquivos</servlet-name>
+		<url-pattern>/UploadArquivos</url-pattern>
+	</servlet-mapping>
+
+	<!-- 
+	<servlet-mapping>
+		<servlet-name>VisualizadorArquivo</servlet-name> 
+		<url-pattern>/VisualizadorArquivo</url-pattern>
+	</servlet-mapping>
+	-->
+
+	<!-- Servlet PAD 
+	<servlet> 
+		<servlet-name>LeitorArquivo</servlet-name> 
+		<servlet-class>br.com.sicoob.sisbr.pad.servlet.LeitorArquivo</servlet-class> 
+		<load-on-startup>1</load-on-startup>
+	</servlet> 
+	
+	<servlet-mapping> 
+		<servlet-name>LeitorArquivo</servlet-name> 
+		<url-pattern>/LeitorArquivo</url-pattern> 
+	</servlet-mapping> 
+	Servlet PAD -->
+
+	<welcome-file-list>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>Login</web-resource-name>
+			<description>Login</description>
+			<url-pattern>*.html</url-pattern>
+			<url-pattern>*.htm</url-pattern>
+			<url-pattern>*.js</url-pattern>
+			<http-method>GET</http-method>
+			<http-method>POST</http-method>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>PortalWeb</role-name>
+		</auth-constraint>
+	</security-constraint>
+
+	<login-config>
+		<auth-method>FORM</auth-method>
+		<realm-name>Bancoob</realm-name>
+		<form-login-config>
+			<form-login-page>/login-redirect.jsp</form-login-page>
+			<form-error-page>/login-redirect.jsp</form-error-page>
+		</form-login-config>
+	</login-config>
+
+	<security-role>
+		<role-name>PortalWeb</role-name>
+	</security-role>
+	
+</web-app>

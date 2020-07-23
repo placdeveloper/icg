@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejb-jar-bnd xmlns="http://websphere.ibm.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://websphere.ibm.com/xml/ns/javaee http://websphere.ibm.com/xml/ns/javaee/ibm-ejb-jar-bnd_1_1.xsd" version="1.1">
+
+	<!-- JOB'S -->
+	<session name="ProcessarValidacaoArquivoJobEJB">
+		<interface class="br.com.sicoob.sws.api.servico.JobServico" binding-name="icg/processamento/ProcessarValidacaoArquivoJobRemote" />
+	</session>
+
+	<session name="ProcessarAtualizacaoArquivoJobEJB">
+		<interface class="br.com.sicoob.sws.api.servico.JobServico" binding-name="icg/processamento/ProcessarAtualizacaoArquivoJobRemote" />
+	</session>
+
+	<!-- STEP'S VALIDACAO-->
+	<session name="ProcessarValidacaoArquivoEmailStepEJB">
+		<interface class="br.com.sicoob.sws.api.servico.StepServico" binding-name="icg/processamento/ProcessarValidacaoArquivoEmailStepRemote" />
+	</session>
+	<session name="ProcessarValidacaoArquivoTelefoneStepEJB">
+		<interface class="br.com.sicoob.sws.api.servico.StepServico" binding-name="icg/processamento/ProcessarValidacaoArquivoTelefoneStepRemote" />
+	</session>
+	<session name="ProcessarValidacaoArquivoFonteRendaStepEJB">
+		<interface class="br.com.sicoob.sws.api.servico.StepServico" binding-name="icg/processamento/ProcessarValidacaoArquivoFonteRendaStepRemote" />
+	</session>
+	<session name="ProcessarValidacaoArquivoEnderecoStepEJB">
+		<interface class="br.com.sicoob.sws.api.servico.StepServico" binding-name="icg/processamento/ProcessarValidacaoArquivoEnderecoStepRemote" />
+	</session>
+	<session name="ProcessarValidacaoArquivoPessoaFisicaStepEJB">
+		<interface class="br.com.sicoob.sws.api.servico.StepServico" binding-name="icg/processamento/ProcessarValidacaoArquivoPessoaFisicaStepRemote" />
+	</session>
+	<session name="ProcessarValidacaoArquivoPessoaJuridicaStepEJB">
+		<interface class="br.com.sicoob.sws.api.servico.StepServico" binding-name="icg/processamento/ProcessarValidacaoArquivoPessoaJuridicaStepRemote" />
+	</session>
+  
+  <!-- STEP'S PROCESSAMENTO-->
+  	<session name="ProcessarAtualizacaoArquivoEmailStepEJB">
+		<interface class="br.com.sicoob.sws.api.servico.StepServico" binding-name="icg/processamento/ProcessarAtualizacaoArquivoEmailStepRemote" />
+	</session>
+  	<session name="ProcessarAtualizacaoArquivoTelefoneStepEJB">
+		<interface class="br.com.sicoob.sws.api.servico.StepServico" binding-name="icg/processamento/ProcessarAtualizacaoArquivoTelefoneStepRemote" />
+	</session>
+  	<session name="ProcessarAtualizacaoArquivoEnderecoStepEJB">
+		<interface class="br.com.sicoob.sws.api.servico.StepServico" binding-name="icg/processamento/ProcessarAtualizacaoArquivoEnderecoStepRemote" />
+	</session>
+  	<session name="ProcessarAtualizacaoArquivoFonteRendaStepEJB">
+		<interface class="br.com.sicoob.sws.api.servico.StepServico" binding-name="icg/processamento/ProcessarAtualizacaoArquivoFonteRendaStepRemote" />
+	</session>
+  	<session name="ProcessarAtualizacaoArquivoPessoaFisicaStepEJB">
+		<interface class="br.com.sicoob.sws.api.servico.StepServico" binding-name="icg/processamento/ProcessarAtualizacaoArquivoPessoaFisicaStepRemote" />
+	</session>
+  	<session name="ProcessarAtualizacaoArquivoPessoaJuridicaStepEJB">
+		<interface class="br.com.sicoob.sws.api.servico.StepServico" binding-name="icg/processamento/ProcessarAtualizacaoArquivoPessoaJuridicaStepRemote" />
+	</session>
+  
+</ejb-jar-bnd>

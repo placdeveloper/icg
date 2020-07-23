@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE queries [
+	<!ELEMENT queries (query*)>
+	<!ELEMENT query (use-case+,description,paginacao?,command+,projecao?,ordenacoes?)>
+	<!ELEMENT use-case    (#PCDATA)>
+	<!ELEMENT description (#PCDATA)>
+	<!ELEMENT command     (#PCDATA)>
+	<!ELEMENT parametros  (#PCDATA)>
+	<!ELEMENT projecao  (#PCDATA)>
+	<!ELEMENT paginar  (#PCDATA)>
+	<!ELEMENT paginacao (#PCDATA)>
+	<!ELEMENT colunaCodigo    (#PCDATA)>
+	<!ELEMENT colunaDescricao    (#PCDATA)>
+	<!ELEMENT numeroOcorrenciasPorPagina    (#PCDATA)>
+	<!ELEMENT primeiraCondicao    (#PCDATA)>
+	<!ELEMENT ascendente    (#PCDATA)>
+	<!ELEMENT ordenacoes (ordenacao+)>
+	<!ELEMENT ordenacao (#PCDATA)>
+	<!ELEMENT sql  (#PCDATA)>
+	<!ATTLIST ordenacao chave CDATA    #REQUIRED>
+	<!ATTLIST ordenacao default CDATA    #IMPLIED>
+	<!ATTLIST command parametros CDATA    #IMPLIED>
+	<!ATTLIST command paginar CDATA    #IMPLIED>
+	<!ATTLIST use-case name CDATA    #REQUIRED>
+	<!ATTLIST query name CDATA    #REQUIRED>
+	<!ATTLIST paginacao colunaCodigo CDATA    #REQUIRED>
+	<!ATTLIST paginacao colunaDescricao CDATA    #REQUIRED>
+	<!ATTLIST paginacao numeroOcorrenciasPorPagina CDATA    #REQUIRED>
+	<!ATTLIST paginacao primeiraCondicao CDATA    #REQUIRED>
+	<!ATTLIST paginacao ascendente CDATA    #REQUIRED>
+	<!ATTLIST paginacao hint CDATA    #REQUIRED>
+	<!ATTLIST paginacao hintAuxiliar CDATA   #IMPLIED>
+]>
+
+  <queries>
+
+	<query name="LISTA_TODOS_ARQUIVOS_IMPORTADOS">
+		<use-case name="Lista arquivos importados" />
+		<description>Lista todos os arquivos importados que ainda não foram processados
+		</description>
+		<command>
+			<![CDATA[
+			SELECT
+			    imp.IDIMPORTAARQUIVO,
+			    imp.NOMEARQUIVO,
+			    imp.NOMEARQUIVODIRETORIO,
+			    imp.DESCDIRETORIO,
+			    imp.DATAHORAIMPORTACAO,
+			    imp.CODTIPOARQUIVOIMPORTACAO,
+			    imp.CODSITUACAOPROCESSAMENTO,
+			    imp.IDUSUARIO,
+			    imp.DESCERROPROCESSSAMENTO,
+			    imp.IDINSTITUICAO
+
+			FROM
+			    ICG.IMPORTAARQUIVO imp
+			where 1 = 1 
+				AND imp.IDINSTITUICAO = <bancoob:valor valor="${idInstituicao}" /> 
+			<j:if test="${nomeArquivo != null}">
+				AND imp.NOMEARQUIVO like '%${nomeArquivo}%' 
+			</j:if>
+			<j:if test="${codigoTipoArquivo != null}">
+				AND imp.CODTIPOARQUIVOIMPORTACAO = <bancoob:valor valor="${codigoTipoArquivo}" /> 
+			</j:if>
+			<j:if test="${situacaoProcessamento != null}">
+				AND imp.CODSITUACAOPROCESSAMENTO = <bancoob:valor valor="${situacaoProcessamento}" /> 
+			</j:if>
+			
+			<j:if test="${dataInicio != null and dataFim != null}">
+					AND DATE(imp.DATAHORAIMPORTACAO) &gt;= <bancoob:valor valor="${dataInicio}" tipo="Date" />
+					AND DATE(imp.DATAHORAIMPORTACAO) &lt;= <bancoob:valor valor="${dataFim}" tipo="Date" />
+			</j:if>
+			
+			]]>
+		</command>
+	</query>
+
+	<query name="ATUALIZA_ERRO_PROCESSAMENTO_ARQUIVO">
+		<use-case name="Atualiza os dados do upload com o retorno dos erros de processamento  " />
+		<description>Atualiza os dados do upload com o retorno dos erros de processamento
+		</description>
+		<command>
+			<![CDATA[
+				UPDATE ICG.IMPORTAARQUIVO 
+					set DESCERROPROCESSSAMENTO = <bancoob:valor valor="${sbErro}" tipo="String" />, 
+						DATAHORAPROCESSAMENTO = CURRENT_TIMESTAMP, 
+						CODSITUACAOPROCESSAMENTO = <bancoob:valor valor="${importaArquivo.codigoSituacaoProcessamento}" />
+				WHERE IDIMPORTAARQUIVO = <bancoob:valor valor="${importaArquivo.idImportaArquivo}" tipo="Integer" />
+			]]>
+		</command>
+	</query>
+
+	<query name="LISTA_ERROS_PROCESSAMENTO">
+		<use-case name="Lista os erros de processamento" />
+		<description>Lista os erros de processamento
+		</description>
+		<command>
+			<![CDATA[
+				SELECT 
+					err.NUMCPFCNPJ, err.CODSITUACAOPROCESSAMENTO, err.DATAHORAPROCESSADO, err.DESCERROPROCESSAMENTO, err.DESCLINHAARQUIVO
+				FROM 
+			<j:if test="${codigoTipoArquivo == '1'}">
+				ICG.PESSOAFISICAIMPORTACAO err
+			</j:if>
+			<j:if test="${codigoTipoArquivo == '2'}">
+				ICG.ENDERECOPESSOAIMPORTACAO err
+			</j:if>
+			<j:if test="${codigoTipoArquivo == '3'}">
+				ICG.TELEFONEPESSOAIMPORTACAO err
+			</j:if>
+			<j:if test="${codigoTipoArquivo == '4'}">
+				ICG.FONTERENDAIMPORTACAO err
+			</j:if>
+			<j:if test="${codigoTipoArquivo == '5'}">
+				ICG.PESSOAJURIDICAIMPORTACAO err
+			</j:if>
+			<j:if test="${codigoTipoArquivo == '6'}">
+				ICG.EMAILPESSOAIMPORTACAO err
+			</j:if>
+			WHERE 
+				err.CODSITUACAOPROCESSAMENTO = <bancoob:valor valor="${situacaoProcessamento}" />
+				AND err.IDIMPORTAARQUIVO = <bancoob:valor valor="${idImportaArquivo}" />
+			
+			]]>
+		</command>
+	</query>
+	
+	<query name="PESQUISAR_IMPORTA_ARQUIVO">
+		<use-case name="Pesquisar arquivos importados" />
+		<description>Pesquisar aquivos importados</description>
+		<command>
+			<![CDATA[
+			from br.com.sicoob.icg.negocio.entidades.ImportaArquivo i
+			where 1=1 
+				<j:if test="${criterios.filtro.situacaoProcessamentoEnum != null}">
+					AND i.codigoSituacaoProcessamento = <bancoob:valorOql valor="${criterios.filtro.situacaoProcessamentoEnum.idSituacao}" tipo="String" />
+				</j:if>
+				<j:if test="${criterios.filtro.tipoAtualizacaoEnum != null}">
+					AND i.codigoTipoArquivo = <bancoob:valorOql valor="${criterios.filtro.tipoAtualizacaoEnum.idTipoMigracao}" tipo="String" />  
+				</j:if> 
+				<j:if test="${criterios.filtro.listaCodigoSituacaoProcessamento != null}">
+					AND i.codigoSituacaoProcessamento in (<bancoob:valorOql valor="${criterios.filtro.listaCodigoSituacaoProcessamento}" tipo="Colecao" />)  
+				</j:if>				
+			]]>
+		</command>
+		<projecao>select i</projecao>
+		<ordenacoes>
+			<ordenacao chave="id" default="true">
+				<![CDATA[ORDER BY i.idImportaArquivo]]>
+			</ordenacao>
+			<ordenacao chave="situacaoProcessamento" default="false">
+				<![CDATA[ORDER BY i.codigoSituacaoProcessamento]]>
+			</ordenacao>
+		</ordenacoes>
+	</query>
+	
+	<query name="PESQUISAR_EMAIL_ARQUIVO">
+		<use-case name="Pesquisar email arquivo" />
+		<description>Pesquisar email arquivo</description>
+		<command>
+			<![CDATA[
+			from br.com.sicoob.icg.negocio.entidades.EmailPessoaImportacao e
+			where 1=1 
+				<j:if test="${criterios.filtro.codSituacaoProcessamento != null}">
+					AND e.codSituacaoProcessamento = <bancoob:valorOql valor="${criterios.filtro.codSituacaoProcessamento}" tipo="String" />
+				</j:if>
+				<j:if test="${criterios.filtro.importaArquivo != null and criterios.filtro.importaArquivo.idImportaArquivo != null}">
+					AND e.importaArquivo.idImportaArquivo = <bancoob:valorOql valor="${criterios.filtro.importaArquivo.idImportaArquivo}" tipo="Long" />  
+				</j:if> 
+			]]>
+		</command>
+		<projecao>select e</projecao>
+		<ordenacoes>
+			<ordenacao chave="id" default="true">
+				<![CDATA[ORDER BY e.idEmail]]>
+			</ordenacao>
+		</ordenacoes>
+	</query>
+
+	<query name="PESQUISAR_ENDERECO_ARQUIVO">
+		<use-case name="Pesquisar enderco arquivo" />
+		<description>Pesquisar endereco arquivo</description>
+		<command>
+			<![CDATA[
+			from br.com.sicoob.icg.negocio.entidades.EnderecoPessoaImportacao en
+			where 1=1 
+				<j:if test="${criterios.filtro.codSituacaoProcessamento != null}">
+					AND en.codSituacaoProcessamento = <bancoob:valorOql valor="${criterios.filtro.codSituacaoProcessamento}" tipo="String" />
+				</j:if>
+				<j:if test="${criterios.filtro.importaArquivo != null and criterios.filtro.importaArquivo.idImportaArquivo != null}">
+					AND en.importaArquivo.idImportaArquivo = <bancoob:valorOql valor="${criterios.filtro.importaArquivo.idImportaArquivo}" tipo="Long" />  
+				</j:if> 
+			]]>
+		</command>
+		<projecao>select en</projecao>
+		<ordenacoes>
+			<ordenacao chave="id" default="true">
+				<![CDATA[ORDER BY en.idEndereco]]>
+			</ordenacao>
+		</ordenacoes>
+	</query>
+
+	<query name="PESQUISAR_FONTE_RENDA_ARQUIVO">
+		<use-case name="Pesquisar fonte de renda arquivo" />
+		<description>Pesquisar fonte de renda arquivo</description>
+		<command>
+			<![CDATA[
+			from br.com.sicoob.icg.negocio.entidades.FonteRendaImportacao fr
+			where 1=1 
+				<j:if test="${criterios.filtro.codSituacaoProcessamento != null}">
+					AND fr.codSituacaoProcessamento = <bancoob:valorOql valor="${criterios.filtro.codSituacaoProcessamento}" tipo="String" />
+				</j:if>
+				<j:if test="${criterios.filtro.importaArquivo != null and criterios.filtro.importaArquivo.idImportaArquivo != null}">
+					AND fr.importaArquivo.idImportaArquivo = <bancoob:valorOql valor="${criterios.filtro.importaArquivo.idImportaArquivo}" tipo="Long" />  
+				</j:if> 
+			]]>
+		</command>
+		<projecao>select fr</projecao>
+		<ordenacoes>
+			<ordenacao chave="id" default="true">
+				<![CDATA[ORDER BY fr.idFonteRenda]]>
+			</ordenacao>
+		</ordenacoes>
+	</query>
+
+	<query name="PESQUISAR_PESSOA_FISICA_ARQUIVO">
+		<use-case name="Pesquisar pessoa fisica arquivo" />
+		<description>Pesquisar pesssoa fisica arquivo</description>
+		<command>
+			<![CDATA[
+			from br.com.sicoob.icg.negocio.entidades.PessoaFisicaImportacao pf
+			where 1=1 
+				<j:if test="${criterios.filtro.codSituacaoProcessamento != null}">
+					AND pf.codSituacaoProcessamento = <bancoob:valorOql valor="${criterios.filtro.codSituacaoProcessamento}" tipo="String" />
+				</j:if>
+				<j:if test="${criterios.filtro.importaArquivo != null and criterios.filtro.importaArquivo.idImportaArquivo != null}">
+					AND pf.importaArquivo.idImportaArquivo = <bancoob:valorOql valor="${criterios.filtro.importaArquivo.idImportaArquivo}" tipo="Long" />  
+				</j:if> 
+			]]>
+		</command>
+		<projecao>select pf</projecao>
+		<ordenacoes>
+			<ordenacao chave="id" default="true">
+				<![CDATA[ORDER BY pf.idPessoaFisica]]>
+			</ordenacao>
+		</ordenacoes>
+	</query>
+
+	<query name="PESQUISAR_PESSOA_JURIDICA_ARQUIVO">
+		<use-case name="Pesquisar pessoa juridica arquivo" />
+		<description>Pesquisar pesssoa juridica arquivo</description>
+		<command>
+			<![CDATA[
+			from br.com.sicoob.icg.negocio.entidades.PessoaJuridicaImportacao pj
+			where 1=1 
+				<j:if test="${criterios.filtro.codSituacaoProcessamento != null}">
+					AND pj.codSituacaoProcessamento = <bancoob:valorOql valor="${criterios.filtro.codSituacaoProcessamento}" tipo="String" />
+				</j:if>
+				<j:if test="${criterios.filtro.importaArquivo != null and criterios.filtro.importaArquivo.idImportaArquivo != null}">
+					AND pj.importaArquivo.idImportaArquivo = <bancoob:valorOql valor="${criterios.filtro.importaArquivo.idImportaArquivo}" tipo="Long" />  
+				</j:if> 
+			]]>
+		</command>
+		<projecao>select pj</projecao>
+		<ordenacoes>
+			<ordenacao chave="id" default="true">
+				<![CDATA[ORDER BY pj.idPessoaJuridica]]>
+			</ordenacao>
+		</ordenacoes>
+	</query>
+	
+	<query name="PESQUISAR_TELEFONE_ARQUIVO">
+		<use-case name="Pesquisar telefone arquivo" />
+		<description>Pesquisar telefone arquivo</description>
+		<command>
+			<![CDATA[
+			from br.com.sicoob.icg.negocio.entidades.TelefonePessoaImportacao t
+			where 1=1 
+				<j:if test="${criterios.filtro.codSituacaoProcessamento != null}">
+					AND t.codSituacaoProcessamento = <bancoob:valorOql valor="${criterios.filtro.codSituacaoProcessamento}" tipo="String" />
+				</j:if>
+				<j:if test="${criterios.filtro.importaArquivo != null and criterios.filtro.importaArquivo.idImportaArquivo != null}">
+					AND t.importaArquivo.idImportaArquivo = <bancoob:valorOql valor="${criterios.filtro.importaArquivo.idImportaArquivo}" tipo="Long" />  
+				</j:if> 
+			]]>
+		</command>
+		<projecao>select t</projecao>
+		<ordenacoes>
+			<ordenacao chave="id" default="true">
+				<![CDATA[ORDER BY t.idTelefone]]>
+			</ordenacao>
+		</ordenacoes>
+	</query>
+	
+</queries>

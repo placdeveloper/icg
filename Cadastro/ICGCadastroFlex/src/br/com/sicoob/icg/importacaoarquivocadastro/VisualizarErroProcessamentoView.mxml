@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cadastro:FormularioCadastroView xmlns:mx="http://www.adobe.com/2006/mxml"
+								 xmlns:cadastro="br.com.bancoob.componentes.cadastro.*"
+								 xmlns:painellista="br.com.bancoob.componentes.painellista.*"
+								 xmlns:componentes="br.com.bancoob.componentes.*"
+								 xmlns:input="br.com.bancoob.componentes.input.*"
+								 xmlns:titulo="br.com.bancoob.componentes.titulo.*"
+								 xmlns:tabelaPaginada="br.com.bancoob.componentes.tabelapaginada.*"
+								 xmlns:grid="br.com.bancoob.componentes.grid.*"
+								 xmlns:containers="br.com.bancoob.componentes.containers.*"
+								 width="800" height="430">
+	
+	<mx:Script>
+		<![CDATA[
+			import br.com.bancoob.componentes.tabelapaginada.TabelaPaginadaUtils;
+			
+		]]>
+	</mx:Script>
+	
+	
+	
+	<containers:VBoxBancoob paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5">
+		
+		<containers:HBoxBancoob paddingTop="15" verticalAlign="middle">
+			
+			<componentes:Rotulo width="120" text="Nome do arquivo:" textAlign="right"/>
+			<input:Texto id="txtArquivo" width="250" editable="false"/>
+			
+		</containers:HBoxBancoob>
+		
+		<containers:HBoxBancoob verticalAlign="middle">
+			
+			<componentes:Rotulo width="120" text="Situação:" textAlign="right"/>
+			<input:Texto id="txtSituacao" width="250" editable="false"/>
+			
+		</containers:HBoxBancoob>
+
+		<containers:HBoxBancoob id="hdGrid" left="10" right="10" top="120" bottom="5"
+								width="56.5%">
+			<tabelaPaginada:TabelaPaginadaMemoria id="gridListaErrosProcessamento" x="2" y="4"
+												  width="100%" height="300"
+												  exibirScrollHorizontal="true" tabIndex="5"
+												  tamanhoPagina="10"
+												  titulo="LISTA DE ERROS DE PROCESSAMENTO">
+				<tabelaPaginada:MetadadosTabela>
+					<grid:ColunaGrid width="120" dataField="pessoa" headerText="CPF/CNPJ"
+									 textAlign="left"/>
+					<grid:ColunaGrid width="120" dataField="dataProcessamento"
+									 headerText="Data do Processamento"
+									 labelFunction="{TabelaPaginadaUtils.defaultDatetimeLabelFunction}"/>
+					<grid:ColunaGrid width="120" dataField="linhaArquivo"
+									 headerText="Linha do arquivo" textAlign="left"/>
+					<grid:ColunaGrid width="120" dataField="descricaoErro"
+									 headerText="Descrição do erro" textAlign="left"/>
+					
+				</tabelaPaginada:MetadadosTabela>
+			</tabelaPaginada:TabelaPaginadaMemoria>
+		</containers:HBoxBancoob>
+		
+		<mx:Spacer height="5"/>
+		
+		<titulo:LinhaView width="100%" height="5"/>
+		
+		<containers:HBoxBancoob width="800" horizontalAlign="right" verticalAlign="middle">
+			
+			<componentes:Botao id="btnVoltar" label="Voltar"/>
+			
+		</containers:HBoxBancoob>		
+		
+	</containers:VBoxBancoob>
+	
+</cadastro:FormularioCadastroView>

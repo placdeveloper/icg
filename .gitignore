@@ -1,0 +1,11 @@
+**/.project
+**/.settings/
+**/.classpath
+**/.factorypath
+**/.tern-project
+**/.flexProperties
+**/.actionScriptProperties
+**/.apt_generated
+**/.apt_generated_tests/
+**/target
+**/bin-debug

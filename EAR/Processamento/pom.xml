@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>icg-ear-processamento</artifactId>
+	<packaging>ear</packaging>
+	<name>ICG - EAR - Processamento</name>
+
+	<parent>
+		<groupId>br.com.sicoob.icg</groupId>
+		<artifactId>icg-modulo-ear</artifactId>
+		<version>1.0.0.24-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-ear-plugin</artifactId>
+				<configuration>
+					<fileNameMapping>no-version</fileNameMapping>
+					<modules>
+						<ejbModule>
+							<groupId>${project.groupId}</groupId>
+							<artifactId>icg-processamento-ejb</artifactId>
+						</ejbModule>
+						<ejbModule>
+							<groupId>${project.groupId}</groupId>
+							<artifactId>icg-comum-ejb</artifactId>
+						</ejbModule>
+					</modules>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<!-- ICG -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>icg-processamento-ejb</artifactId>
+			<version>${project.version}</version>
+			<type>ejb</type>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>icg-comum-ejb</artifactId>
+			<version>${project.version}</version>
+			<type>ejb</type>
+		</dependency>
+		<!-- ICG -->
+
+		<!-- INTERNAS -->
+		<!-- INTERNAS -->
+	</dependencies>
+
+</project>

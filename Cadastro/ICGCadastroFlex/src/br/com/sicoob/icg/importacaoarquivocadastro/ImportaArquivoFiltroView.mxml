@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<validaveis:CanvasValidavel xmlns:mx="http://www.adobe.com/2006/mxml"
+							xmlns:validaveis="br.com.bancoob.componentes.containers.validaveis.*"
+							xmlns:containers="br.com.bancoob.componentes.containers.*"
+							xmlns:componentes="br.com.bancoob.componentes.*"
+							xmlns:input="br.com.bancoob.componentes.input.*"
+							xmlns:bancoobInput="br.com.bancoob.componentes.input.*"
+							xmlns:painellista="br.com.bancoob.componentes.painellista.*">
+	
+	<mx:Script>
+		<![CDATA[
+			
+		]]>
+	</mx:Script>
+	
+	<containers:VBoxBancoob width="100%" paddingLeft="5" paddingTop="15">
+		
+		<containers:HBoxBancoob width="100%" verticalAlign="middle">
+			<componentes:Rotulo width="100" text="Nome do Arquivo:" textAlign="left"/>
+			<input:Texto id="txtNomeArquivo" width="290" maxChars="30"/>
+			<componentes:Rotulo width="80" text="Data Início:" textAlign="right"/>
+			<input:Data id="dataInicio" width="100" dataDefault="{null}"
+						validarMensagem="Informe a data inicial" validarObrigatorio="false"/>
+
+			<componentes:Rotulo width="55" text="Data Fim: " textAlign="right"/>
+			<input:Data id="dataFim" width="100" dataDefault="{null}"
+						validarMensagem="Informe a data final" validarObrigatorio="false"/>
+			
+		</containers:HBoxBancoob>
+
+		<containers:HBoxBancoob width="100%" verticalAlign="middle">
+			<componentes:Rotulo width="100" text="Situação do Proc.:" textAlign="left"/>
+			<input:Combo id="comboSituacaoProcessamento" width="290" inserirItemOpcional="true"
+						 labelField="descricao" labelItemOpcional="Selecione"
+						 somenteMaiusculas="false" validarObrigatorio="false"/>
+			<componentes:Rotulo width="80" text="Tipo Arquivo:" textAlign="right"/>
+			<input:Combo id="comboTipoAtualizacao" width="272" inserirItemOpcional="true"
+						 labelField="descricao" labelItemOpcional="Selecione"
+						 somenteMaiusculas="false" validarObrigatorio="false"/>
+		</containers:HBoxBancoob>
+
+		<mx:Spacer height="5"/>
+		
+		<containers:HBoxBancoob width="100%" verticalAlign="middle">
+			<containers:HBoxBancoob width="98.5%" horizontalAlign="right" verticalAlign="middle">
+				<componentes:Botao id="btLimpar" x="224" y="45" label="Limpar"/>
+				<componentes:Botao id="btConsultar" x="224" y="45" label="Consultar"/>
+			</containers:HBoxBancoob>
+		</containers:HBoxBancoob>
+		
+	</containers:VBoxBancoob>
+	
+</validaveis:CanvasValidavel>

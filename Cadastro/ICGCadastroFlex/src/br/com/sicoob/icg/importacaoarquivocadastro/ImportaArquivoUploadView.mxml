@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cadastro:FormularioCadastroView xmlns:mx="http://www.adobe.com/2006/mxml"
+								 xmlns:cadastro="br.com.bancoob.componentes.cadastro.*"
+								 xmlns:componentes="br.com.bancoob.componentes.*"
+								 xmlns:containers="br.com.bancoob.componentes.containers.*"
+								 xmlns:input="br.com.bancoob.componentes.input.*"
+								 xmlns:titulo="br.com.bancoob.componentes.titulo.*"
+								 width="470" height="430" verticalScrollPolicy="auto">
+	
+	<mx:Script>
+		<![CDATA[
+			
+		]]>
+	</mx:Script>
+	
+	<containers:VBoxBancoob paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5">
+		<containers:HBoxBancoob paddingTop="15" verticalAlign="middle">
+			<componentes:Rotulo width="90" text="Instituição :" textAlign="right"/>
+			<input:Texto id="txtIdInstituicao" width="350" editable="false"/>
+		</containers:HBoxBancoob>
+		
+		<containers:HBoxBancoob paddingTop="5" verticalAlign="middle">
+			<componentes:Rotulo width="90" text="Tipo Arquivo*:" textAlign="right"/>
+			<input:Combo id="comboTipoArquivo" width="350" inserirItemOpcional="true" labelItemOpcional="Selecione"
+						 labelField="descricao" somenteMaiusculas="false" validarObrigatorio="true"/>
+		</containers:HBoxBancoob>
+
+		<titulo:LinhaView width="100%" height="10"/>
+		
+		<containers:HBoxBancoob width="450" horizontalAlign="right" verticalAlign="middle">
+			<componentes:Botao id="botaoVoltar" label="Voltar"/>
+		</containers:HBoxBancoob>
+		
+		<titulo:SubtituloView texto="" x="0" y="0" />
+		<containers:VBoxBancoob id="idBoxComponenteUpload" x="0" y="0" width="100%">			
+		</containers:VBoxBancoob>
+		
+	</containers:VBoxBancoob>
+</cadastro:FormularioCadastroView>

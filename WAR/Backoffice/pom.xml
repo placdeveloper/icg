@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>icg-war-backoffice</artifactId>
+	<packaging>war</packaging>
+
+	<name>ICG - WAR - Backoffice</name>
+
+	<parent>
+		<groupId>br.com.sicoob.icg</groupId>
+		<artifactId>icg-modulo-war</artifactId>
+		<version>1.0.0.24-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
+
+	<properties>
+		<timestamp>${maven.build.timestamp}</timestamp>
+		<maven.build.timestamp.format>dd/MM/yyyy - HH:mm</maven.build.timestamp.format>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>war-work</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>exploded</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<stripModuleArtifactInfo>true</stripModuleArtifactInfo>
+					<stripVersion>true</stripVersion>
+					<useFinalName>true</useFinalName>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+					<webResources>
+						<resource>
+							<directory>${webapp-dir}</directory>
+							<filtering>true</filtering>
+							<includes>
+								<include>index.html</include>
+							</includes>
+						</resource>
+						<resource>
+							<directory>${webapp-dir}</directory>
+							<filtering>false</filtering>
+							<excludes>
+								<exclude>index.html</exclude>
+								<exclude>sisbr*.xml</exclude>
+							</excludes>
+						</resource>
+					</webResources>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.sonatype.flexmojos</groupId>
+				<artifactId>flexmojos-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>copy-flex-resources</goal>
+						</goals>
+						<configuration>
+							<stripModuleArtifactInfo>true</stripModuleArtifactInfo>
+							<stripVersion>true</stripVersion>
+							<useFinalName>true</useFinalName>
+							<webappDirectory>${project.build.directory}/${project.build.finalName}/sisbr/${project.build.finalName}/swf</webappDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+<!-- 			<plugin> -->
+<!-- 				<groupId>org.apache.maven.plugins</groupId> -->
+<!-- 				<artifactId>maven-dependency-plugin</artifactId> -->
+<!-- 				<version>2.1</version> -->
+<!-- 				<executions> -->
+<!-- 					<execution> -->
+<!-- 						<id>copydep</id> -->
+<!-- 						<phase>prepare-package</phase> -->
+<!-- 						<goals> -->
+<!-- 							<goal>copy-dependencies</goal> -->
+<!-- 						</goals> -->
+<!-- 						<inherited>false</inherited> -->
+<!-- 						<configuration> -->
+<!-- 							<stripModuleArtifactInfo>true</stripModuleArtifactInfo> -->
+<!-- 							<stripVersion>true</stripVersion> -->
+<!-- 							<useFinalName>true</useFinalName> -->
+<!-- 							<includeArtifactIds></includeArtifactIds> -->
+<!-- 							<outputDirectory>${project.build.directory}/${project.build.finalName}/sisbr/${project.build.finalName}/swc</outputDirectory> -->
+<!-- 						</configuration> -->
+<!-- 					</execution> -->
+<!-- 				</executions> -->
+<!-- 			</plugin> -->
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.2.1</version>
+				<executions>
+					<execution>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>java</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<includePluginDependencies>true</includePluginDependencies>
+					<executableDependency>
+						<groupId>br.com.sicoob.hash</groupId>
+						<artifactId>gerador-hash</artifactId>
+					</executableDependency>
+					<mainClass>br.com.sicoob.hash.HashGenerator</mainClass>
+					<arguments>
+						<argument>-appId</argument>
+						<argument>${project.build.finalName}</argument>
+						<argument>-baseDir</argument>
+						<argument>${project.build.directory}</argument>
+						<argument>-verbose</argument>
+					</arguments>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>br.com.sicoob.hash</groupId>
+						<artifactId>gerador-hash</artifactId>
+						<version>${versao.gerador-hash}</version>
+						<type>jar</type>
+					</dependency>
+				</dependencies>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.8</version>
+				<executions>
+					<execution>
+						<phase>verify</phase>
+						<configuration>
+							<target>
+								<delete>
+									<fileset dir="${webapp-dir}" id="hash-files">
+										<include name="sisbrControlUpdate.xml" />
+										<include name="sisbrImageUpdate.xml" />
+										<include name="sisbrUpdate.xml" />
+										<include name="sisbrUpdateAIR.xml" />
+									</fileset>
+								</delete>
+								<delete dir="${webapp-dir}/sisbr" />
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.sonatype.flexmojos</groupId>
+										<artifactId>flexmojos-maven-plugin</artifactId>
+										<versionRange>[4.2-beta,)</versionRange>
+										<goals>
+											<goal>copy-flex-resources</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<dependencies>
+		<!-- JAVA -->
+
+		<!-- ICG -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>icg-cadastro-fachada</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- ICG -->
+
+		<!-- FLEX -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>icg-cadastro-flex</artifactId>
+			<version>${project.version}</version>
+			<type>swf</type>
+			<classifier>importaarquivocadastro</classifier>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>icg-cadastro-flex</artifactId>
+			<version>${project.version}</version>
+			<type>swf</type>
+			<classifier>downloaddominio</classifier>
+		</dependency>
+		<!-- FLEX -->
+	</dependencies>
+
+</project>

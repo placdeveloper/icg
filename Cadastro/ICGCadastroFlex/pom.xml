@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>icg-cadastro-flex</artifactId>
+	<packaging>swf</packaging>
+
+	<name>ICG - Cadastro - ICGCadastroFlex</name>
+
+	<parent>
+		<groupId>br.com.sicoob.icg</groupId>
+		<artifactId>icg-modulo-cadastro</artifactId>
+		<version>1.0.0.24-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
+
+	<properties>
+		<sonar.language>flex</sonar.language>
+	</properties>
+
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+		<plugins>
+			<plugin>
+				<groupId>org.sonatype.flexmojos</groupId>
+				<artifactId>flexmojos-maven-plugin</artifactId>
+				<version>4.2-beta</version>
+				<inherited>true</inherited>
+				<extensions>true</extensions>
+				<configuration>
+					<debug>true</debug>
+					<sourceFile>TesteCadastro.mxml</sourceFile>
+					<includeClasses>
+						<scan>
+							<includes>
+								<include>**/*.as</include>
+								<include>**/*.mxml</include>
+							</includes>
+						</scan>
+					</includeClasses>
+					<modules>
+						<module>
+							<sourceFile>ImportaArquivoCadastro.as</sourceFile>
+							<finalName>importaarquivocadastro</finalName>
+						</module>
+						<module>
+							<sourceFile>DownloadDominio.as</sourceFile>
+							<finalName>downloaddominio</finalName>
+						</module>
+					</modules>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<!-- ICG -->
+		<!-- ICG -->
+
+		<!-- INTERNAS -->
+		<dependency>
+			<groupId>br.com.sicoob.framework.portal</groupId>
+			<artifactId>prt-base-sicoob-flex</artifactId>
+			<version>${versao.prt-framework}</version>
+			<type>swc</type>
+			<scope>external</scope>
+		</dependency>
+		<dependency>
+			<groupId>br.com.sicoob.framework.portal</groupId>
+			<artifactId>prt-base-componentes-flex</artifactId>
+			<version>${versao.prt-framework}</version>
+			<type>swc</type>
+			<scope>external</scope>
+		</dependency>
+		<dependency>
+			<groupId>br.com.sicoob.framework.portal</groupId>
+			<artifactId>prt-base-constantes-flex</artifactId>
+			<version>${versao.prt-framework}</version>
+			<type>swc</type>
+			<scope>external</scope>
+		</dependency>
+		<dependency>
+			<groupId>br.com.sicoob.framework.portal</groupId>
+			<artifactId>prt-base-sisbr-assets-flex</artifactId>
+			<version>${versao.prt-base-sisbr-assets}</version>
+			<type>swc</type>
+			<scope>external</scope>
+		</dependency>
+		<dependency>
+			<groupId>br.com.sicoob.framework.portal</groupId>
+			<artifactId>prt-base-sisbr-flex</artifactId>
+			<version>${versao.prt-framework}</version>
+			<type>swc</type>
+			<scope>external</scope>
+		</dependency>
+		<!-- INTERNAS -->
+
+		<!-- EXTERNAS -->
+		<dependency>
+			<groupId>com.adobe.flex.framework</groupId>
+			<artifactId>flex-framework</artifactId>
+			<version>${versao.sdk.flex}</version>
+			<type>pom</type>
+			<exclusions>
+				<exclusion>
+					<groupId>com.adobe.flex.framework</groupId>
+					<artifactId>playerglobal</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.adobe.flex.framework</groupId>
+			<artifactId>playerglobal</artifactId>
+			<version>${versao.sdk.flex}</version>
+			<classifier>10</classifier>
+			<type>swc</type>
+		</dependency>
+		<dependency>
+			<groupId>com.adobe.flex.framework</groupId>
+			<artifactId>datavisualization</artifactId>
+			<version>${versao.sdk.flex}</version>
+			<type>swc</type>
+		</dependency>
+		<dependency>
+			<groupId>com.adobe.flex.framework</groupId>
+			<artifactId>datavisualization</artifactId>
+			<version>${versao.sdk.flex}</version>
+			<type>rb.swc</type>
+		</dependency>
+		<dependency>
+			<groupId>org.graniteds</groupId>
+			<artifactId>granite-swc</artifactId>
+			<version>${versao.granite}</version>
+			<type>swc</type>
+		</dependency>
+		<dependency>
+			<groupId>org.graniteds</groupId>
+			<artifactId>granite-hibernate-swc</artifactId>
+			<version>${versao.granite}</version>
+			<type>swc</type>
+		</dependency>
+		<!-- EXTERNAS -->
+	</dependencies>
+</project>
